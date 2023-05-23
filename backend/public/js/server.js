@@ -2,7 +2,7 @@ import express from "express";
 
 const app = express();
 
-app.get("/api", (req, res) => {
+app.get("/home", (req, res) => {
   res.json({
     users: ["userone", "usertwo", "usethree", "userfour"],
   });
