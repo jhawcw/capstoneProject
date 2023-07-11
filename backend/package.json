@@ -1,24 +1,27 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "nodejs expressjs framework",
+  "name": "myinfo-demo-app",
+  "version": "3.0.0",
+  "description": "This is MyInfo Demo App",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon ./public/js/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run test",
+    "test": "node app.js test",
+    "sandbox": "node app.js sandbox"
   },
-  "author": "Jason Haw",
+  "author": "MyInfo Team",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "myinfo-connector-nodejs": "^0.0.12",
     "body-parser": "^1.19.0",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^9.0.1",
     "lodash": "^4.17.21",
+    "mongoose": "^7.3.2",
+    "myinfo-connector-nodejs": "^0.0.8",
     "path": "^0.12.7",
     "pug": "^3.0.2"
-  },
-  "type": "module"
+  }
 }
