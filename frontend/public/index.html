@@ -5,10 +5,7 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+    <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -25,6 +22,49 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
+    <script>
+      if (this.location.href.indexOf("callback?code") > -1) {
+        callServerAPIs(); // call the backend server APIs
+      } else if (this.location.href.indexOf("callback") > -1) {
+        alert("ERROR:" + JSON.stringify("Missing Auth Code"));
+      }
+
+      function callServerAPIs() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const authCode = urlParams.get("code");
+        const state = urlParams.get("state");
+
+        console.log("Auth Code:", authCode);
+        console.log("State:", state);
+
+        // invoke AJAX call from frontend client side to your backend server side
+
+        fetch("/getPersonData", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            authCode: authCode,
+            state: state,
+          }),
+        })
+          .then(function (response) {
+            if (response.ok) {
+              console.log(response);
+              return response.json();
+            } else {
+              throw new Error("Error: " + response.status);
+            }
+          })
+          .then(function (result) {
+            console.log("result", result);
+          })
+          .catch(function (error) {
+            alert("ERROR: " + error.message);
+          });
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

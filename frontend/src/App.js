@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from "react";
+import RegisterForm from "./components/Forms/RegisterForm";
+import callServerAPIs from "./utils/callServerAPIs";
 
 function App() {
-  const [backendData, setBackendData] = useState([{}]);
+  const [backendData, setBackendData] = useState("");
 
   useEffect(() => {
-    fetch("/home")
+    fetch("/getEnv")
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        console.log("we are here");
         setBackendData(data);
       });
   }, []);
 
   return (
     <div>
-      {typeof backendData.users === "undefined" ? (
+      {typeof backendData.authApiUrl === "undefined" ? (
         <p>Loading...</p>
       ) : (
-        backendData.users.map((user, i) => <p key={i}>{user} </p>)
+        <p value={backendData.authApiUrl}> </p>
+        // backendData.authApiUrl.map((user, i) => <p key={i}>{user} </p>)
       )}
+      <RegisterForm envData={backendData} />
     </div>
   );
 }
