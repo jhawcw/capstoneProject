@@ -10,6 +10,7 @@ var MyInfoConnector = require("myinfo-connector-nodejs");
 const mongoose = require("mongoose");
 const userModel = require("./models/userModel");
 const userRoutes = require("./routes/userRoutes");
+const listingRoutes = require("./routes/listingRoutes");
 
 // Database connection START//
 dotenv.config({ path: "./config.env" });
@@ -40,6 +41,7 @@ app.use(
 app.use(cookieParser());
 
 app.use("/users", userRoutes);
+app.use("/listings", listingRoutes);
 
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/public/index.html");
