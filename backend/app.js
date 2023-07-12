@@ -8,6 +8,7 @@ const crypto = require("crypto");
 const colors = require("colors");
 var MyInfoConnector = require("myinfo-connector-nodejs");
 const mongoose = require("mongoose");
+const morgan = require("morgan");
 const userModel = require("./models/userModel");
 const userRoutes = require("./routes/userRoutes");
 const listingRoutes = require("./routes/listingRoutes");
@@ -24,6 +25,7 @@ const app = express();
 const port = 3001;
 const config = require("./config/config.js");
 
+// all the middleware that gets executed before the API endpoint gets executed
 app.use(express.json());
 app.use(cors());
 
@@ -39,6 +41,8 @@ app.use(
   })
 );
 app.use(cookieParser());
+app.use(morgan("dev"));
+// end of all middleware
 
 app.use("/users", userRoutes);
 app.use("/listings", listingRoutes);

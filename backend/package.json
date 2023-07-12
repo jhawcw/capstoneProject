@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "npm run test",
-    "test": "node app.js test",
+    "test": "nodemon app.js test",
     "sandbox": "node app.js sandbox"
   },
   "author": "MyInfo Team",
@@ -20,6 +20,7 @@
     "jsonwebtoken": "^9.0.1",
     "lodash": "^4.17.21",
     "mongoose": "^7.3.2",
+    "morgan": "^1.10.0",
     "myinfo-connector-nodejs": "^0.0.8",
     "path": "^0.12.7",
     "pug": "^3.0.2"

@@ -11,5 +11,7 @@ router.post("/tenant/register", userController.tenantRegister);
 router.get("/allusers", userController.getAll);
 // For All users to login and get JWT
 router.post("/login", authController.login);
+// For admin to delete user and for user to update their password
+router.delete("/:id", userController.deleteUser).patch("/:id", userController.updateUserPassword);
 
 module.exports = router;

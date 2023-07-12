@@ -52,3 +52,46 @@ exports.getAll = async (req, res) => {
     console.log(err);
   }
 };
+
+exports.updateUserPassword = async (req, res) => {
+  try {
+    const formData = req.body;
+    if (req.body) {
+      const query = await userModel.findOneAndUpdate(
+        { _id: req.params.id },
+        { password: req.body.password }
+      );
+      res.status(200).json({
+        status: "success",
+        message: "Your password has been updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        status: "Not found",
+        message: "Please key in your new password",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const query = await userModel.findByIdAndDelete(req.params.id);
+    console.log(query);
+    if (query) {
+      return res.status(200).json({
+        status: "success",
+        message: "The user has been deleted",
+      });
+    } else {
+      return res.status(404).json({
+        status: "Not found",
+        message: "The user does not exist",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};

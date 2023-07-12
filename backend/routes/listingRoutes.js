@@ -5,6 +5,9 @@ const router = express.Router();
 
 router.post("/create", listingController.createListing);
 router.get("/alllistings", listingController.getAll);
-router.get("/:id", listingController.getOne);
+router
+  .get("/:id", listingController.getOne)
+  .patch("/:id", listingController.updateListing)
+  .delete("/:id", listingController.deleteListing);
 
 module.exports = router;
