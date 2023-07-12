@@ -1,4 +1,34 @@
+const multer = require("multer");
 const userModel = require("../models/userModel");
+
+// Multer configuration to upload user photo into server's filesystem, (NOT DATABASE) start
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/img/users");
+  },
+  filename: (req, file, cb) => {
+    // user-76767676abc76dba-3332222332.jpeg
+    // user-userID-timestamp-fileextension
+    const extension = file.mimetype.split("/")[1];
+    cb(null, `user-${req.user.id}-${Date.now()}.${extension}`);
+  },
+});
+// this filter is to prevent user from uploading non image file
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(new AppError("Not an image! Please upload only images", 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+exports.uploadUserPhoto = upload.single("photo");
+// Multer configuration to upload user photo into server's filesystem, (NOT DATABASE) end
 
 exports.landlordRegister = (req, res) => {
   const formData = req.body;
@@ -54,6 +84,8 @@ exports.getAll = async (req, res) => {
 };
 
 exports.updateUserPassword = async (req, res) => {
+  console.log(req.file);
+  console.log(req.body);
   try {
     const formData = req.body;
     if (req.body) {
