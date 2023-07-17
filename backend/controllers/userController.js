@@ -1,5 +1,6 @@
 const multer = require("multer");
 const userModel = require("../models/userModel");
+const AppError = require("../utils/appError");
 
 // Multer configuration to upload user photo into server's filesystem, (NOT DATABASE) start
 

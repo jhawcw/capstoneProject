@@ -1,4 +1,36 @@
+const multer = require("multer");
 const listingModel = require("../models/listingModel");
+const catchAsync = require("../utils/catchAsync");
+
+// Multer configuration to upload user photo into server's filesystem, (NOT DATABASE) start
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/img/listingVerifications");
+  },
+  filename: (req, file, cb) => {
+    // user-76767676abc76dba-3332222332.jpeg
+    // user-userID-timestamp-fileextension
+    const extension = file.mimetype.split("/")[1];
+    //cb(null, `user-${req.user.id}-${Date.now()}.${extension}`);
+    cb(null, `user--${Date.now()}.${extension}`);
+  },
+});
+// this filter is to prevent user from uploading non image file
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(new AppError("Not an image! Please upload only images", 400), false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+exports.uploadVerificationPhoto = upload.single("photo");
+// Multer configuration to upload user photo into server's filesystem, (NOT DATABASE) end
 
 exports.createListing = (req, res) => {
   const formData = req.body;
@@ -16,18 +48,18 @@ exports.createListing = (req, res) => {
   });
 };
 
-exports.getAll = async (req, res) => {
-  try {
-    const query = await listingModel.find();
-    res.status(200).json({
-      data: query,
-    });
-  } catch (err) {
-    console.log(err);
-  }
-};
+exports.getAll = catchAsync(async (req, res) => {
+  const queryObj = { ...req.query };
+  const excludedFields = ["page", "sort", "limit", "fields"];
+  excludedFields.forEach((ele) => delete queryObj[ele]);
 
-exports.getOne = async (req, res, next) => {
+  const query = await listingModel.find(queryObj);
+  res.status(200).json({
+    data: query,
+  });
+});
+
+exports.getOne = catchAsync(async (req, res, next) => {
   console.log(req.params.id);
   let query = await listingModel.findById(req.params.id).populate("landlord");
   res.status(200).json({
@@ -36,44 +68,47 @@ exports.getOne = async (req, res, next) => {
       data: query,
     },
   });
-};
+});
 
 exports.updateListing = async (req, res) => {
-  try {
-    const formData = req.body;
-    if (req.body) {
-      const query = await listingModel.findOneAndUpdate({ _id: req.params.id }, req.body);
-      res.status(200).json({
-        status: "success",
-        message: "Your listing has been updated successfully",
-      });
-    } else {
-      res.status(404).json({
-        status: "Not found",
-        message: "Your listing is not found",
-      });
-    }
-  } catch (err) {
-    console.log(err);
+  const formData = req.body;
+
+  if (req.file) {
+    return res.status(200).json({
+      status: "success",
+      message: "You've successfully submitted a photo for verification",
+    });
+  }
+  if (req.body) {
+    const query = await listingModel.findOneAndUpdate({ _id: req.params.id }, req.body);
+    res.status(200).json({
+      status: "success",
+      message: "Your listing has been updated successfully",
+    });
+  } else {
+    res.status(404).json({
+      status: "Not found",
+      message: "Your listing is not found",
+    });
   }
 };
 
-exports.deleteListing = async (req, res) => {
-  try {
-    const query = await listingModel.findByIdAndDelete(req.params.id);
-    console.log(query);
-    if (query) {
-      return res.status(200).json({
-        status: "success",
-        message: "The listing has been deleted",
-      });
-    } else {
-      return res.status(404).json({
-        status: "Not found",
-        message: "The listing does not exist",
-      });
-    }
-  } catch (err) {
-    console.log(err);
+exports.deleteListing = catchAsync(async (req, res) => {
+  const query = await listingModel.findByIdAndDelete(req.params.id);
+  console.log(query);
+  if (query) {
+    return res.status(200).json({
+      status: "success",
+      message: "The listing has been deleted",
+    });
+  } else {
+    return res.status(404).json({
+      status: "Not found",
+      message: "The listing does not exist",
+    });
   }
-};
+});
+
+exports.verifyListing = catchAsync(async (req, res) => {
+  const formData = req.body;
+});

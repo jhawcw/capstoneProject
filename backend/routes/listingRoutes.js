@@ -8,7 +8,7 @@ router.post("/create", listingController.createListing);
 router.get("/alllistings", listingController.getAll);
 router
   .get("/:id", listingController.getOne)
-  .patch("/:id", listingController.updateListing)
+  .patch("/:id", listingController.uploadVerificationPhoto, listingController.updateListing)
   .delete("/:id", listingController.deleteListing);
 
 module.exports = router;

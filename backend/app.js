@@ -12,6 +12,8 @@ const morgan = require("morgan");
 const userModel = require("./models/userModel");
 const userRoutes = require("./routes/userRoutes");
 const listingRoutes = require("./routes/listingRoutes");
+const AppError = require("./utils/appError");
+const globalErrorHandler = require("./controllers/errorController");
 
 // Database connection START//
 dotenv.config({ path: "./config.env" });
@@ -44,35 +46,13 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 // end of all middleware
 
+// all configured routes for server
 app.use("/users", userRoutes);
 app.use("/listings", listingRoutes);
 
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/public/index.html");
 });
-
-// app.post("/register", (req, res) => {
-//   const formData = req.body;
-//   console.log("this is the formdata:", formData);
-//   let regadd = formData.regadd.split("\r\n");
-//   let block = regadd[0].trim();
-//   let address = regadd[1].trim();
-//   let postal = regadd[2].trim();
-//   let fulladdress = block + " " + address + " " + postal;
-//   const newUser = new userModel({
-//     fullName: formData.name,
-//     sex: formData.sex,
-//     address: fulladdress,
-//     housingType: formData.housingType,
-//     password: formData.password,
-//     singpass: true,
-//     nric: formData.uinfin,
-//   });
-//   newUser.save().then((doc) => {
-//     console.log(doc);
-//   });
-//   res.send({ body: formData });
-// });
 
 // get the environment variables (app info) from the config
 app.get("/getEnv", function (req, res) {
@@ -175,21 +155,29 @@ app.post("/getPersonData", function (req, res, next) {
   }
 });
 
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  var err = new Error("Not Found");
-  err.status = 404;
-  next(err);
+// // catch 404 and forward to error handler
+// app.use(function (req, res, next) {
+//   var err = new Error("Not Found");
+//   err.status = 404;
+//   next(err);
+// });
+
+// // error handlers
+// // print stacktrace on error
+// app.use(function (err, req, res, next) {
+//   res.status(err.status || 500);
+//   res.render("error", {
+//     message: err.message,
+//     error: err,
+//   });
+// });
+
+// if no such route exist, the server will send this response
+app.all("*", (req, res, next) => {
+  next(new AppError(`can't find ${req.originalUrl} on this server`, 404));
 });
 
-// error handlers
-// print stacktrace on error
-app.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  res.render("error", {
-    message: err.message,
-    error: err,
-  });
-});
+//error handling middleware
+app.use(globalErrorHandler);
 
 app.listen(port, () => console.log(`Demo App Client listening on port ${port}!`));

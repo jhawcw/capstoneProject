@@ -65,10 +65,11 @@ exports.protect = async (req, res, next) => {
     return next(new AppError("The user belonging to this token no longer exist", 401));
   }
   // 4) check if user has changed his password after JWT was issued
-  if (freshUser.changePasswordAfter(decoded.iat)) {
-    return next(new AppError("User has recently changed the password! Please login again", 401));
-  }
-  req.user = currentUser;
-  res.locals.user = currentUser;
+  // if (freshUser.changePasswordAfter(decoded.iat)) {
+  //   return next(new AppError("User has recently changed the password! Please login again", 401));
+  // }
+  //password changed at will be done in the final version
+  req.user = freshUser;
+  res.locals.user = freshUser;
   next();
 };
