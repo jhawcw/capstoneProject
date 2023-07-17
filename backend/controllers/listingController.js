@@ -12,8 +12,8 @@ const multerStorage = multer.diskStorage({
     // user-76767676abc76dba-3332222332.jpeg
     // user-userID-timestamp-fileextension
     const extension = file.mimetype.split("/")[1];
-    //cb(null, `user-${req.user.id}-${Date.now()}.${extension}`);
-    cb(null, `user--${Date.now()}.${extension}`);
+    cb(null, `user-${req.user.id}-${Date.now()}.${extension}`);
+    //cb(null, `user--${Date.now()}.${extension}`);
   },
 });
 // this filter is to prevent user from uploading non image file
@@ -74,6 +74,12 @@ exports.updateListing = async (req, res) => {
   const formData = req.body;
 
   if (req.file) {
+    const doc = await listingModel.findOneAndUpdate(
+      { _id: req.params.id },
+      { $inc: { verifiedCount: 1 } },
+      { new: true }
+    );
+
     return res.status(200).json({
       status: "success",
       message: "You've successfully submitted a photo for verification",

@@ -18,13 +18,24 @@ const listingSchema = new mongoose.Schema({
   landlord: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
   imageCover: {
     type: String,
-    required: [true, "A listing must have images"],
+    //required: [true, "A listing must have images"],
   },
   images: [String],
   createdAt: {
     type: Date,
     default: Date.now(),
   },
+  verifiedCount: {
+    type: Number,
+    default: 0,
+  },
+});
+
+listingSchema.post("findOneAndUpdate", async (doc) => {
+  if (doc.verifiedCount === 2) {
+    doc.verified = true;
+    await doc.save();
+  }
 });
 
 const Listing = mongoose.model("Listing", listingSchema);
