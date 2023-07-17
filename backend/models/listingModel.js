@@ -16,6 +16,15 @@ const listingSchema = new mongoose.Schema({
     default: false,
   },
   landlord: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+  imageCover: {
+    type: String,
+    required: [true, "A listing must have images"],
+  },
+  images: [String],
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 const Listing = mongoose.model("Listing", listingSchema);
