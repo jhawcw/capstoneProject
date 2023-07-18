@@ -16,6 +16,18 @@ const multerStorage = multer.diskStorage({
     //cb(null, `user--${Date.now()}.${extension}`);
   },
 });
+const multerStorage2 = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/img/listings");
+  },
+  filename: (req, file, cb) => {
+    // user-76767676abc76dba-3332222332.jpeg
+    // user-userID-timestamp-fileextension
+    const extension = file.mimetype.split("/")[1];
+    cb(null, `user-${req.user.id}-${Date.now()}-${Math.floor(Math.random() * 10000)}.${extension}`);
+    //cb(null, `user--${Date.now()}.${extension}`);
+  },
+});
 // this filter is to prevent user from uploading non image file
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
@@ -29,17 +41,33 @@ const upload = multer({
   storage: multerStorage,
   fileFilter: multerFilter,
 });
+const upload2 = multer({
+  storage: multerStorage2,
+  fileFilter: multerFilter,
+});
 exports.uploadVerificationPhoto = upload.single("photo");
+exports.uploadListingPhoto = upload2.fields([
+  { name: "imageCover", maxCount: 1 },
+  { name: "images", maxCount: 3 },
+]);
 // Multer configuration to upload user photo into server's filesystem, (NOT DATABASE) end
 
 exports.createListing = (req, res) => {
   const formData = req.body;
+  console.log(req.body);
+  console.log(req.files);
   const newListing = new listingModel({
     title: formData.title,
     price: formData.price,
     address: formData.address,
     housingType: formData.housingType,
     landlord: formData.landlord,
+    imageCover: req.files.imageCover[0].filename,
+    images: [
+      req.files.images[0].filename,
+      req.files.images[1].filename,
+      req.files.images[2].filename,
+    ],
   });
   newListing.save();
   res.status(200).json({

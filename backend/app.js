@@ -54,6 +54,8 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + "/public/index.html");
 });
 
+app.use("/public", express.static("public"));
+
 // get the environment variables (app info) from the config
 app.get("/getEnv", function (req, res) {
   try {

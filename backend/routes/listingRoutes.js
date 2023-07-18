@@ -5,7 +5,12 @@ const authController = require("../controllers/authController");
 
 const router = express.Router();
 
-router.post("/create", listingController.createListing);
+router.post(
+  "/create",
+  authController.protect,
+  listingController.uploadListingPhoto,
+  listingController.createListing
+);
 router.get("/alllistings", listingController.getAll);
 router
   .get("/:id", listingController.getOne)
