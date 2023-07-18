@@ -29,6 +29,7 @@ const listingSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  verifiedBy: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
 });
 
 listingSchema.post("findOneAndUpdate", async (doc) => {

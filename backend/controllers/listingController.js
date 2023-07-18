@@ -76,7 +76,7 @@ exports.updateListing = async (req, res) => {
   if (req.file) {
     const doc = await listingModel.findOneAndUpdate(
       { _id: req.params.id },
-      { $inc: { verifiedCount: 1 } },
+      { $inc: { verifiedCount: 1 }, $push: { verifiedBy: req.user } },
       { new: true }
     );
 
