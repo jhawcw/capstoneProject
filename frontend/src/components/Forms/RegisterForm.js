@@ -1,11 +1,6 @@
-import { useState } from "react";
 import callAuthoriseApi from "../../utils/callAuthoriseApi";
 
 const RegisterForm = (props) => {
-  const [NRICInput, setNRICInput] = useState("");
-  const [givenName, SetGivenName] = useState("");
-  const [surname, SetSurname] = useState("h");
-  console.log(props.envData);
   var state = Math.floor(Math.random() * 100000);
 
   const formSubmitHandler = async (event) => {
@@ -20,30 +15,51 @@ const RegisterForm = (props) => {
     );
   };
 
-  const NRICChangeHandler = (event) => {
-    setNRICInput(event.target.value);
-  };
-
   return (
-    <div>
-      <form method="GET" onSubmit={formSubmitHandler}>
-        <label>NRIC</label>
-        <div />
-        <input type="text" id="NRIC" onChange={NRICChangeHandler}></input>
-        <div />
-        <input type="submit" value="Retrieve MyInfo"></input>
-      </form>
+    <>
+      <div className="d-flex align-items-center justify-content-center">
+        <h3 className="text-center">Register as a Landlord</h3>
+      </div>
+      <div className="d-flex align-items-center justify-content-center">
+        <form method="GET" onSubmit={formSubmitHandler}>
+          <input type="submit" value="Retrieve MyInfo" className="btn btn-primary fw-bold"></input>
+        </form>
+      </div>
+      <hr />
+      <div className="d-flex align-items-center justify-content-center">
+        <h3 className="text-center">Register as a Tenant</h3>
+      </div>
+      <div className="form-group">
+        <input className="form-control" type="text" name="fullname" placeholder="Full Name" />
+      </div>
+      <div className="form-group">
+        <input className="form-control" type="password" name="password" placeholder="Password" />
+      </div>
+      <div className="form-group">
+        <input
+          className="form-control"
+          type="password"
+          name="password-repeat"
+          placeholder="Password (repeat)"
+        />
+      </div>
+      <div className="d-flex align-items-center justify-content-center">
+        <input type="submit" value="Register" className="btn btn-primary fw-bold"></input>
+      </div>
+      <hr />
+      <h3 className="text-center">Login here</h3>
       <form>
-        <label>Name</label>
-        <div />
-        <input type="text" disabled={true} value={givenName}></input>
-        <div />
-        <label>Surname</label>
-        <div />
-        <input type="text" contentEditable={false}></input>
-        <div />
+        <div className="form-group">
+          <input className="form-control" type="text" name="fullname" placeholder="Full Name" />
+        </div>
+        <div className="form-group">
+          <input className="form-control" type="password" name="password" placeholder="Password" />
+        </div>
+        <div className="d-flex align-items-center justify-content-center">
+          <input type="submit" value="Login" className="btn btn-primary fw-bold"></input>
+        </div>
       </form>
-    </div>
+    </>
   );
 };
 
