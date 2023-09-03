@@ -16,4 +16,5 @@ router
   .delete("/:id", userController.deleteUser)
   .patch("/:id", userController.uploadUserPhoto, userController.updateUserPassword);
 
+router.post("/testregister", userController.uploadUserPhoto, userController.pairTest);
 module.exports = router;

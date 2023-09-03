@@ -1,4 +1,5 @@
 import MyButton from "../Buttons/Button";
+import Button from "react-bootstrap/Button";
 
 const NavBarContent = (props) => {
   return (
@@ -20,6 +21,10 @@ const NavBarContent = (props) => {
         cssClass={"btn btn-primary fw-bold"}
         clickHandler={props.btnClickHandler}
       />
+      <Button variant="primary fw-bold" onClick={props.showLoginModalHandler}>
+        Login
+      </Button>
+      <Button variant="secondary"> Register </Button>
     </div>
   );
 };

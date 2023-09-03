@@ -1,4 +1,5 @@
 const multer = require("multer");
+const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 const AppError = require("../utils/appError");
 
@@ -57,17 +58,27 @@ exports.landlordRegister = (req, res) => {
   });
 };
 
-exports.tenantRegister = (req, res) => {
+exports.tenantRegister = async (req, res) => {
   const formData = req.body;
-  console.log(req.body);
+  const userFullname = formData.fullname;
+
   const newUser = new userModel({
-    fullName: formData.name,
+    fullName: formData.fullname,
     sex: formData.sex,
     password: formData.password,
   });
-  newUser.save();
+  await newUser.save();
+  const newUserData = await userModel.findOne({ fullName: userFullname });
+  let token = "";
+  token = jwt.sign({ id: newUserData._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+
   res.status(200).json({
     status: "success",
+    userID: newUserData.id,
+    role: newUserData.role,
+    token: token,
     message:
       "Congratulations your account has been created, please login with your full name and password",
   });
@@ -124,6 +135,18 @@ exports.deleteUser = async (req, res) => {
         message: "The user does not exist",
       });
     }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.pairTest = async (req, res) => {
+  try {
+    console.log(req);
+    console.log(req.body);
+    return res.status(200).json({
+      message: req.body,
+    });
   } catch (err) {
     console.log(err);
   }

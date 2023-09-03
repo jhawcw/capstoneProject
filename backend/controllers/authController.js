@@ -30,8 +30,10 @@ exports.login = async (req, res, next) => {
   }
   // 2)check if user exists and password is correct
   const user = await userModel.findOne({ fullName });
+  if (!user) {
+    return next(new AppError("User doesnt not exist", 401));
+  }
   const userPassword = user.password === password ? true : false;
-
   // 3)if everything is ok , send token to client
   let token = "";
   if (user && userPassword) {
@@ -39,11 +41,13 @@ exports.login = async (req, res, next) => {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
   } else {
-    return next(new AppError("Incorrect email or password", 401));
+    return next(new AppError("Incorrect name or password", 401));
   }
 
   res.status(200).json({
     status: "success",
+    userID: user.id,
+    role: user.role,
     token: token,
   });
 };

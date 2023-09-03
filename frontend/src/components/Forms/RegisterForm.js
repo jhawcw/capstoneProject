@@ -1,4 +1,5 @@
 import callAuthoriseApi from "../../utils/callAuthoriseApi";
+import RegisterTenantForm from "./RegisterTenantForm";
 
 const RegisterForm = (props) => {
   var state = Math.floor(Math.random() * 100000);
@@ -29,6 +30,15 @@ const RegisterForm = (props) => {
       <div className="d-flex align-items-center justify-content-center">
         <h3 className="text-center">Register as a Tenant</h3>
       </div>
+      <RegisterTenantForm
+        handleClose={props.handleClose}
+        setRole={props.setRole}
+        setUserId={props.setUserId}
+        setCookie={props.setCookie}
+      ></RegisterTenantForm>
+      {/* <div className="d-flex align-items-center justify-content-center">
+        <h3 className="text-center">Register as a Tenant</h3>
+      </div>
       <div className="form-group">
         <input className="form-control" type="text" name="fullname" placeholder="Full Name" />
       </div>
@@ -45,20 +55,7 @@ const RegisterForm = (props) => {
       </div>
       <div className="d-flex align-items-center justify-content-center">
         <input type="submit" value="Register" className="btn btn-primary fw-bold"></input>
-      </div>
-      <hr />
-      <h3 className="text-center">Login here</h3>
-      <form>
-        <div className="form-group">
-          <input className="form-control" type="text" name="fullname" placeholder="Full Name" />
-        </div>
-        <div className="form-group">
-          <input className="form-control" type="password" name="password" placeholder="Password" />
-        </div>
-        <div className="d-flex align-items-center justify-content-center">
-          <input type="submit" value="Login" className="btn btn-primary fw-bold"></input>
-        </div>
-      </form>
+      </div> */}
     </>
   );
 };
