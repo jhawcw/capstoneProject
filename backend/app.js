@@ -12,6 +12,7 @@ const morgan = require("morgan");
 const userModel = require("./models/userModel");
 const userRoutes = require("./routes/userRoutes");
 const listingRoutes = require("./routes/listingRoutes");
+const commentRoutes = require("./routes/commentRoutes");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
 
@@ -49,6 +50,7 @@ app.use(morgan("dev"));
 // all configured routes for server
 app.use("/users", userRoutes);
 app.use("/listings", listingRoutes);
+app.use("/comments", commentRoutes);
 
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/public/index.html");

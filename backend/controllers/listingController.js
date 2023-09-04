@@ -56,19 +56,31 @@ exports.createListing = (req, res) => {
   const formData = req.body;
   console.log(req.body);
   console.log(req.files);
-  const newListing = new listingModel({
-    title: formData.title,
-    price: formData.price,
-    address: formData.address,
-    housingType: formData.housingType,
-    landlord: formData.landlord,
-    imageCover: req.files.imageCover[0].filename,
-    images: [
-      req.files.images[0].filename,
-      req.files.images[1].filename,
-      req.files.images[2].filename,
-    ],
-  });
+  let newListing;
+  if (req.files) {
+    newListing = new listingModel({
+      title: formData.title,
+      price: formData.price,
+      address: formData.address,
+      housingType: formData.housingType,
+      landlord: formData.landlord,
+      imageCover: req.files.imageCover[0].filename,
+      images: [
+        req.files.images[0].filename,
+        req.files.images[1].filename,
+        req.files.images[2].filename,
+      ],
+    });
+  } else {
+    newListing = new listingModel({
+      title: formData.title,
+      price: formData.price,
+      address: formData.address,
+      housingType: formData.housingType,
+      landlord: formData.landlord,
+    });
+  }
+
   newListing.save();
   res.status(200).json({
     status: "success",

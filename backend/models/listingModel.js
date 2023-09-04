@@ -25,6 +25,7 @@ const listingSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  comments: [{ type: mongoose.Schema.ObjectId, ref: "Comment" }],
   verifiedCount: {
     type: Number,
     default: 0,
