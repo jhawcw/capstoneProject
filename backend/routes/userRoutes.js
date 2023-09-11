@@ -17,4 +17,5 @@ router
   .patch("/:id", userController.uploadUserPhoto, userController.updateUserPassword);
 
 router.post("/testregister", userController.uploadUserPhoto, userController.pairTest);
+router.get("/check-cookie", authController.checkCookie);
 module.exports = router;

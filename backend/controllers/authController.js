@@ -77,3 +77,41 @@ exports.protect = async (req, res, next) => {
   res.locals.user = freshUser;
   next();
 };
+
+exports.checkCookie = async (req, res) => {
+  try {
+    const cookieName = "Rent@SG Cookie";
+
+    if (req.cookies[cookieName]) {
+      // console.log("cookie exist");
+      // console.log("cookie code is: ", req.cookies[cookieName]);
+
+      const decoded = await promisify(jwt.verify)(req.cookies[cookieName], process.env.JWT_SECRET);
+      console.log(decoded, "this is decoded");
+      const currentUser = await userModel.findById(decoded.id);
+      console.log(currentUser);
+      if (currentUser) {
+        res.status(200).json({
+          status: "success",
+          message: "User is logged in",
+          isLogin: true,
+        });
+      } else {
+        res.status(404).json({
+          status: "Not Found",
+          message: "User not found",
+          isLogin: false,
+        });
+      }
+    } else {
+      console.log("cookie doesnt exist");
+      res.status(401).json({
+        status: "Unsuccessful",
+        message: "No cookie present",
+        isLogin: false,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};

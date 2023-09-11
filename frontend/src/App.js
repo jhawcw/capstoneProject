@@ -19,7 +19,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [userId, setUserId] = useState("");
   const [role, setRole] = useState("");
-  const [cookies, setCookie, removeCookie] = useCookies(["cookie-name"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["Rent@SG Cookie"]);
   const loginHandler = () => setLoggedIn(true);
   const logoutHandler = () => setLoggedIn(false);
 
@@ -57,6 +57,20 @@ function App() {
         setListingData(data.data);
       });
   }, []);
+
+  //check if cookie token is present in the browser
+  useEffect(() => {
+    if (cookies["Rent@SG Cookie"]) {
+      fetch("/users/check-cookie")
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data.isLogin) {
+            setLoggedIn(true);
+          }
+        });
+    }
+  }, [cookies]);
 
   return (
     <div>
