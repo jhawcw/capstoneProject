@@ -16,6 +16,9 @@ router
   .delete("/:id", userController.deleteUser)
   .patch("/:id", userController.uploadUserPhoto, userController.updateUserPassword);
 
-router.post("/testregister", userController.uploadUserPhoto, userController.pairTest);
+// For all user to obtain their own profile
+router.get("/my-profile", userController.getProfile);
+
+// router.post("/testregister", userController.uploadUserPhoto, userController.pairTest);
 router.get("/check-cookie", authController.checkCookie);
 module.exports = router;

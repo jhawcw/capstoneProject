@@ -87,7 +87,6 @@ exports.checkCookie = async (req, res) => {
       // console.log("cookie code is: ", req.cookies[cookieName]);
 
       const decoded = await promisify(jwt.verify)(req.cookies[cookieName], process.env.JWT_SECRET);
-      console.log(decoded, "this is decoded");
       const currentUser = await userModel.findById(decoded.id);
       console.log(currentUser);
       if (currentUser) {
@@ -95,6 +94,7 @@ exports.checkCookie = async (req, res) => {
           status: "success",
           message: "User is logged in",
           isLogin: true,
+          id: currentUser.id,
         });
       } else {
         res.status(404).json({

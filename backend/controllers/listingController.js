@@ -23,6 +23,7 @@ const multerStorage2 = multer.diskStorage({
   filename: (req, file, cb) => {
     // user-76767676abc76dba-3332222332.jpeg
     // user-userID-timestamp-fileextension
+    console.log(file, "this is file");
     const extension = file.mimetype.split("/")[1];
     cb(null, `user-${req.user.id}-${Date.now()}-${Math.floor(Math.random() * 10000)}.${extension}`);
     //cb(null, `user--${Date.now()}.${extension}`);
@@ -62,7 +63,7 @@ exports.createListing = (req, res) => {
       title: formData.title,
       price: formData.price,
       address: formData.address,
-      housingType: formData.housingType,
+      housingtype: formData.housingType,
       landlord: formData.landlord,
       imageCover: req.files.imageCover[0].filename,
       images: [
@@ -157,4 +158,12 @@ exports.deleteListing = catchAsync(async (req, res) => {
 
 exports.verifyListing = catchAsync(async (req, res) => {
   const formData = req.body;
+});
+
+exports.testUpload = catchAsync(async (req, res) => {
+  console.log(req.files);
+
+  res.status(200).json({
+    status: "success",
+  });
 });

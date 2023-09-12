@@ -1,5 +1,6 @@
 const multer = require("multer");
 const jwt = require("jsonwebtoken");
+const { promisify } = require("util");
 const userModel = require("../models/userModel");
 const AppError = require("../utils/appError");
 
@@ -140,13 +141,32 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
-exports.pairTest = async (req, res) => {
+exports.getProfile = async (req, res) => {
   try {
-    console.log(req);
-    console.log(req.body);
-    return res.status(200).json({
-      message: req.body,
-    });
+    const cookieName = "Rent@SG Cookie";
+
+    if (req.cookies[cookieName]) {
+      const decoded = await promisify(jwt.verify)(req.cookies[cookieName], process.env.JWT_SECRET);
+      const currentUser = await userModel.findById(decoded.id);
+
+      console.log(currentUser);
+
+      res.status(200).json({
+        status: "success",
+        message: "Successfully retrieved user's data",
+        fullname: currentUser.fullName,
+        sex: currentUser.sex,
+        address: currentUser.address,
+        housingtype: currentUser.housingType,
+        singpass: currentUser.singpass,
+        role: currentUser.role,
+      });
+    } else {
+      res.status(401).json({
+        status: "Unsuccessful",
+        message: "No cookie present",
+      });
+    }
   } catch (err) {
     console.log(err);
   }

@@ -22,4 +22,11 @@ router
   )
   .delete("/:id", listingController.deleteListing);
 
+router.post(
+  "/testupload",
+  authController.protect,
+  listingController.uploadListingPhoto,
+  listingController.testUpload
+);
+
 module.exports = router;
