@@ -27,26 +27,6 @@ const CreateListingForm = (props) => {
     }));
   };
 
-  const handleFileChange = (event) => {
-    const selectedImageCover = imageCoverInputRef.current.files[0];
-    const selectedImages = Array.from(imagesInputRef.current.files);
-
-    // if (selectedImageCover) {
-    //   console.log(`Selected image cover: ${selectedImageCover.name}`);
-    // } else {
-    //   console.log("No image cover selected");
-    // }
-
-    // if (selectedImages.length > 0) {
-    //   console.log("Selected images:");
-    //   selectedImages.forEach((image) => {
-    //     console.log(image.name);
-    //   });
-    // } else {
-    //   console.log("No images selected");
-    //}
-  };
-
   const handlePriceChange = (event) => {
     let { name, value } = event.target;
 
@@ -74,18 +54,19 @@ const CreateListingForm = (props) => {
     });
 
     try {
-      const response = await fetch("http://localhost:3001/listings/testupload", {
+      const response = await fetch("http://localhost:3001/listings/create", {
         method: "POST",
         headers: {
           authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
         },
         body: form,
       });
+      console.log(response);
     } catch (err) {
       console.log(err);
     }
 
-    props.closeListingModalHandler();
+    // props.closeListingModalHandler();
   };
 
   return (
@@ -174,7 +155,6 @@ const CreateListingForm = (props) => {
             <Form.Label>Listing Display Picture</Form.Label>
             <Form.Control
               type="file"
-              onChange={handleFileChange}
               name="imageCover"
               accept=".png,.jpg,.jpeg"
               ref={imageCoverInputRef}
@@ -191,7 +171,6 @@ const CreateListingForm = (props) => {
               multiple
               accept=".png,.jpg,.jpeg"
               name="images"
-              onChange={handleFileChange}
               ref={imagesInputRef}
             />
           </Form.Group>

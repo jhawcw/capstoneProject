@@ -9,6 +9,7 @@ router.post(
   "/create",
   authController.protect,
   listingController.uploadListingPhoto,
+  listingController.resizeUploads,
   listingController.createListing
 );
 router.get("/alllistings", listingController.getAll);

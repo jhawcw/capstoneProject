@@ -1,4 +1,5 @@
 const multer = require("multer");
+const sharp = require("sharp");
 const listingModel = require("../models/listingModel");
 const catchAsync = require("../utils/catchAsync");
 
@@ -23,7 +24,7 @@ const multerStorage2 = multer.diskStorage({
   filename: (req, file, cb) => {
     // user-76767676abc76dba-3332222332.jpeg
     // user-userID-timestamp-fileextension
-    console.log(file, "this is file");
+
     const extension = file.mimetype.split("/")[1];
     cb(null, `user-${req.user.id}-${Date.now()}-${Math.floor(Math.random() * 10000)}.${extension}`);
     //cb(null, `user--${Date.now()}.${extension}`);
@@ -42,35 +43,120 @@ const upload = multer({
   storage: multerStorage,
   fileFilter: multerFilter,
 });
+const multerStorage3 = multer.memoryStorage();
 const upload2 = multer({
-  storage: multerStorage2,
+  storage: multerStorage3,
   fileFilter: multerFilter,
 });
+
+// This function resizes the image to a specific dimension
+const resizeImage = async (req, file, cb) => {
+  try {
+    // Resize the uploaded image to a specific width and height
+    await sharp(file.buffer)
+      .resize({ width: 800, height: 600 }) // Adjust the dimensions as needed
+      .toFile(`public/img/listings/${file.filename}`);
+
+    cb(null, true);
+  } catch (error) {
+    cb(error);
+  }
+};
+
 exports.uploadVerificationPhoto = upload.single("photo");
 exports.uploadListingPhoto = upload2.fields([
   { name: "imageCover", maxCount: 1 },
   { name: "images", maxCount: 3 },
 ]);
+
+exports.resizeUploads = (req, res, next) => {
+  if (!req.files || (!req.files.imageCover && !req.files.images)) {
+    return next();
+  }
+
+  const promises = [];
+  req.coverPictureName = "jason";
+  req.listingPictureName = [];
+
+  if (req.files.imageCover) {
+    const imageCover = req.files.imageCover[0];
+    promises.push(
+      new Promise((resolve, reject) => {
+        req.coverPictureName = `listings-${req.user.id}-${Date.now()}-${Math.floor(
+          Math.random() * 10000
+        )}.jpeg`;
+        sharp(imageCover.buffer)
+          .resize({ width: 2000, height: 1333 })
+          .toFormat("jpeg")
+          .jpeg({ quality: 90 }) // Adjust dimensions as needed
+          .toFile(`public/img/listings/${req.coverPictureName}`, (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve();
+            }
+          });
+      })
+    );
+  }
+
+  if (req.files.images) {
+    req.files.images.forEach((image) => {
+      promises.push(
+        new Promise((resolve, reject) => {
+          let listingpic = `listings-${req.user.id}-${Date.now()}-${Math.floor(
+            Math.random() * 10000
+          )}.jpeg`;
+          req.listingPictureName.push(listingpic);
+          sharp(image.buffer)
+            .resize({ width: 2000, height: 1333 })
+            .toFormat("jpeg")
+            .jpeg({ quality: 90 }) // Adjust dimensions as needed
+            .toFile(`public/img/listings/${listingpic}`, (err) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve();
+              }
+            });
+        })
+      );
+    });
+  }
+
+  Promise.all(promises)
+    .then(() => {
+      next();
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+// Middleware for uploading listing photos
+
 // Multer configuration to upload user photo into server's filesystem, (NOT DATABASE) end
 
 exports.createListing = (req, res) => {
   const formData = req.body;
-  console.log(req.body);
-  console.log(req.files);
+
+  // console.log(req.coverPictureName);
+  // console.log(req.listingPictureName);
   let newListing;
+
   if (req.files) {
+    const images = req.listingPictureName.map((image) => image.filename);
+
     newListing = new listingModel({
       title: formData.title,
       price: formData.price,
       address: formData.address,
-      housingtype: formData.housingType,
+      housingType: formData.housingtype,
       landlord: formData.landlord,
-      imageCover: req.files.imageCover[0].filename,
-      images: [
-        req.files.images[0].filename,
-        req.files.images[1].filename,
-        req.files.images[2].filename,
-      ],
+      description: formData.description,
+      rentalType: formData.rentaltype,
+      imageCover: req.coverPictureName,
+      images: images,
     });
   } else {
     newListing = new listingModel({
@@ -87,6 +173,7 @@ exports.createListing = (req, res) => {
     status: "success",
     message: "Congratulations your listing has been created",
   });
+  console.log("listing successfully created");
 };
 
 exports.getAll = catchAsync(async (req, res) => {
@@ -161,7 +248,7 @@ exports.verifyListing = catchAsync(async (req, res) => {
 });
 
 exports.testUpload = catchAsync(async (req, res) => {
-  console.log(req.files);
+  console.log(req.body);
 
   res.status(200).json({
     status: "success",

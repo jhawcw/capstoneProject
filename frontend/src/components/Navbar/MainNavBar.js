@@ -41,6 +41,7 @@ const MainNavBar = (props) => {
                 Register
               </Nav.Link>
             ) : null}
+            {props.isLoggedIn ? <Nav.Link className="fs-5">My Listings</Nav.Link> : null}
             {props.isLoggedIn ? (
               <Nav.Link className="fs-5" onClick={props.showListingModalHandler}>
                 Create Listing

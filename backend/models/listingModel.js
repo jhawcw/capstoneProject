@@ -25,6 +25,14 @@ const listingSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  description: {
+    type: String,
+    default: null,
+  },
+  rentalType: {
+    type: String,
+    default: null,
+  },
   comments: [{ type: mongoose.Schema.ObjectId, ref: "Comment" }],
   verifiedCount: {
     type: Number,

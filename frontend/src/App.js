@@ -9,6 +9,9 @@ import LoginModal from "./components/Modals/LoginModal";
 import MainNavBar from "./components/Navbar/MainNavBar";
 import RegisterModal from "./components/Modals/RegisterModal";
 import ListingModal from "./components/Modals/ListingModal";
+import Container from "react-bootstrap/esm/Container";
+import Col from "react-bootstrap/esm/Col";
+import Row from "react-bootstrap/esm/Row";
 
 function App() {
   const [backendData, setBackendData] = useState("");
@@ -66,6 +69,21 @@ function App() {
   const closeListingModalHandler = () => {
     setShowListingModal(false);
   };
+
+  // useEffect(() => {
+  //   const eventSource = new EventSource("http://localhost:3001/tickets/continuous-updates");
+
+  //   eventSource.onmessage = (event) => {
+  //     const data = JSON.parse(event.data);
+  //     // Handle received updates and update your state
+  //     //setListingData(data);
+  //     console.log(data);
+  //     return () => {
+  //       eventSource.close();
+  //     };
+  //   };
+  //   console.log("running");
+  // }, []);
 
   // get the env variables for the singpass API
   useEffect(() => {
@@ -149,12 +167,17 @@ function App() {
           content={<RegisterForm envData={backendData} />}
         ></MyModal>
       )}
-
-      <div className="bg-primary-subtle d-flex align-items-center justify-content-center">
-        {listingData.map((item) => (
-          <MyCard key={item._id} title={item.title} imageCover={item.imageCover} />
-        ))}
-      </div>
+      <Container style={{ paddingTop: "10vh" }}>
+        <Row>
+          {/* <div className="bg-primary-subtle row align-items-center justify-content-center"> */}
+          {listingData.map((item, ind) => (
+            <Col md={3} style={{ height: "350px" }} key={ind}>
+              <MyCard key={item._id} title={item.title} imageCover={item.imageCover} />
+            </Col>
+          ))}
+          {/* </div> */}
+        </Row>
+      </Container>
     </div>
   );
 }
