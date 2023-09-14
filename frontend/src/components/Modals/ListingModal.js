@@ -22,6 +22,7 @@ const ListingModal = (props) => {
             userHousingType={props.userHousingType}
             userId={props.userId}
             cookies={props.cookies}
+            setUserListingData={props.setUserListingData}
           ></CreateListingForm>
         </Modal.Body>
       </Modal>

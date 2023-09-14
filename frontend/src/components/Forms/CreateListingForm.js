@@ -62,11 +62,18 @@ const CreateListingForm = (props) => {
         body: form,
       });
       console.log(response);
+      if (response) {
+        fetch(`/listings/alllistings?landlord=${props.userId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            props.setUserListingData(data.data);
+          });
+      }
     } catch (err) {
       console.log(err);
     }
 
-    // props.closeListingModalHandler();
+    props.closeListingModalHandler();
   };
 
   return (

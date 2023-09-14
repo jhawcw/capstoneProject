@@ -6,13 +6,19 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 const MainNavBar = (props) => {
   const logoutHandler = () => {
     props.removeCookie("Rent@SG Cookie");
+    props.setDisplayListings("verified");
     props.logoutHandler();
   };
-
+  //className="bg-body-tertiary"
+  //data-bs-theme="light"
   return (
-    <Navbar expand="lg" className="bg-body-tertiary" data-bs-theme="light" fixed="top">
-      <Container>
-        <Navbar.Brand href="#home" className="fs-5">
+    <Navbar expand="lg" fixed="top" style={{ backgroundColor: "#ffd4cf" }}>
+      <Container style={{ backgroundColor: "#ffd4cf" }}>
+        <Navbar.Brand
+          href="#home"
+          className="fs-5"
+          onClick={() => props.setDisplayListings("verified")}
+        >
           Rent@SG
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -41,7 +47,11 @@ const MainNavBar = (props) => {
                 Register
               </Nav.Link>
             ) : null}
-            {props.isLoggedIn ? <Nav.Link className="fs-5">My Listings</Nav.Link> : null}
+            {props.isLoggedIn ? (
+              <Nav.Link className="fs-5" onClick={() => props.setDisplayListings("my listings")}>
+                My Listings
+              </Nav.Link>
+            ) : null}
             {props.isLoggedIn ? (
               <Nav.Link className="fs-5" onClick={props.showListingModalHandler}>
                 Create Listing

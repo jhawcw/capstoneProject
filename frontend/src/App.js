@@ -16,14 +16,18 @@ import Row from "react-bootstrap/esm/Row";
 function App() {
   const [backendData, setBackendData] = useState("");
   const [listingData, setListingData] = useState([]);
+  const [userListingData, setUserListingData] = useState([]);
   const [show, setShow] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showListingModal, setShowListingModal] = useState(false);
+  const [showAllListings, setShowAllListings] = useState(true);
+  const [showMyListings, setShowMyListings] = useState(false);
+  const [displayListings, setDisplayListings] = useState("verified");
 
   // Login state
   const [loggedIn, setLoggedIn] = useState(false);
-  const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useState(null);
   const [role, setRole] = useState("");
   const [userAddress, setUserAddress] = useState("");
   const [userHousingType, setUserHousingType] = useState("");
@@ -99,11 +103,12 @@ function App() {
     fetch("/listings/alllistings?verified=true")
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setListingData(data.data);
       });
   }, []);
 
-  //check if cookie token is present in the browser
+  // check if cookie token is present in the browser
   useEffect(() => {
     if (cookies["Rent@SG Cookie"]) {
       fetch("/users/check-cookie")
@@ -118,8 +123,19 @@ function App() {
     }
   }, [cookies]);
 
+  // get all the currently logged in user's listings on the server
+  useEffect(() => {
+    if (userId) {
+      fetch(`/listings/alllistings?landlord=${userId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setUserListingData(data.data);
+        });
+    }
+  }, [userId]);
+
   return (
-    <div>
+    <div style={{ backgroundColor: "#fff1ef" }} className="pb-5">
       <MainNavBar
         isLoggedIn={loggedIn}
         showLoginModalHandler={showLoginModalHandler}
@@ -128,6 +144,7 @@ function App() {
         removeCookie={removeCookie}
         logoutHandler={logoutHandler}
         envData={backendData}
+        setDisplayListings={setDisplayListings}
       ></MainNavBar>
 
       <ListingModal
@@ -138,6 +155,7 @@ function App() {
         userHousingType={userHousingType}
         userId={userId}
         cookies={cookies}
+        setUserListingData={setUserListingData}
       ></ListingModal>
 
       <LoginModal
@@ -169,13 +187,23 @@ function App() {
       )}
       <Container style={{ paddingTop: "10vh" }}>
         <Row>
-          {/* <div className="bg-primary-subtle row align-items-center justify-content-center"> */}
-          {listingData.map((item, ind) => (
-            <Col md={3} style={{ height: "350px" }} key={ind}>
-              <MyCard key={item._id} title={item.title} imageCover={item.imageCover} />
-            </Col>
-          ))}
-          {/* </div> */}
+          {displayListings === "verified" &&
+            listingData.map((item, ind) => (
+              <Col md={3} style={{ height: "350px" }} key={ind}>
+                <MyCard key={item._id} title={item.title} imageCover={item.imageCover} />
+              </Col>
+            ))}
+          {displayListings === "my listings" &&
+            userListingData.map((item, ind) => (
+              <Col md={3} style={{ height: "350px" }} key={ind} className="mb-4">
+                <MyCard
+                  key={item._id}
+                  title={item.title}
+                  imageCover={item.imageCover}
+                  listingData={item}
+                />
+              </Col>
+            ))}
         </Row>
       </Container>
     </div>
