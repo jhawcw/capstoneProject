@@ -30,7 +30,7 @@ const config = require("./config/config.js");
 
 // all the middleware that gets executed before the API endpoint gets executed
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000" }));
 
 app.set("views", path.join(__dirname, "public/views"));
 app.set("view engine", "pug");

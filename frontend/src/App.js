@@ -189,13 +189,13 @@ function App() {
         <Row>
           {displayListings === "verified" &&
             listingData.map((item, ind) => (
-              <Col md={3} style={{ height: "350px" }} key={ind}>
+              <Col md={3} style={{ height: "425px" }} key={ind} className="mb-4 mt-4">
                 <MyCard key={item._id} title={item.title} imageCover={item.imageCover} />
               </Col>
             ))}
           {displayListings === "my listings" &&
             userListingData.map((item, ind) => (
-              <Col md={3} style={{ height: "350px" }} key={ind} className="mb-4">
+              <Col md={3} style={{ height: "425px" }} key={ind} className="mb-4  mt-4">
                 <MyCard
                   key={item._id}
                   title={item.title}
