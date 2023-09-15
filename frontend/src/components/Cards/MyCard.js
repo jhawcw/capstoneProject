@@ -3,7 +3,7 @@ import MyButton from "../Buttons/Button";
 import Stack from "react-bootstrap/Stack";
 
 const MyCard = (props) => {
-  console.log(props.listingData);
+  // console.log(props.listingData);
   return (
     <Card style={{ height: "100%" }} className="">
       <Stack gap={3} style={{ height: "100%" }}>
@@ -29,9 +29,15 @@ const MyCard = (props) => {
           <Card.Text>{props.content}</Card.Text>
         </Card.Body>
         <Card.Footer style={{ backgroundColor: "#ffd4cf", height: "13%" }}>
-          <MyButton displayText="Rent" cssClass="me-3 btn btn-secondary" />
+          {!props.listingData && <MyButton displayText="Rent" cssClass="me-3 btn btn-secondary" />}
+
           {props.listingData && !props.listingData.verified && (
-            <MyButton displayText="Verify Now" cssClass="btn btn-primary" />
+            <MyButton
+              displayText="Verify Now"
+              cssClass="btn btn-primary"
+              clickHandler={props.showVerifyModalHandler}
+              listingId={props.listingData._id}
+            />
           )}
           {/* {props.listingData.verified ? (
             <MyButton displayText="Verify Now" cssClass="btn btn-primary" />

@@ -48,6 +48,14 @@ const MainNavBar = (props) => {
               </Nav.Link>
             ) : null}
             {props.isLoggedIn ? (
+              <Nav.Link
+                className="fs-5"
+                onClick={() => props.setDisplayListings("verify listings")}
+              >
+                Verify Listings
+              </Nav.Link>
+            ) : null}
+            {props.isLoggedIn ? (
               <Nav.Link className="fs-5" onClick={() => props.setDisplayListings("my listings")}>
                 My Listings
               </Nav.Link>

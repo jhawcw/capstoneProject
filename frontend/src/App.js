@@ -9,6 +9,7 @@ import LoginModal from "./components/Modals/LoginModal";
 import MainNavBar from "./components/Navbar/MainNavBar";
 import RegisterModal from "./components/Modals/RegisterModal";
 import ListingModal from "./components/Modals/ListingModal";
+import VerifyModal from "./components/Modals/VerifyModal";
 import Container from "react-bootstrap/esm/Container";
 import Col from "react-bootstrap/esm/Col";
 import Row from "react-bootstrap/esm/Row";
@@ -17,13 +18,14 @@ function App() {
   const [backendData, setBackendData] = useState("");
   const [listingData, setListingData] = useState([]);
   const [userListingData, setUserListingData] = useState([]);
+  const [unverifiedListingData, setUnverifiedListingData] = useState([]);
   const [show, setShow] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showListingModal, setShowListingModal] = useState(false);
-  const [showAllListings, setShowAllListings] = useState(true);
-  const [showMyListings, setShowMyListings] = useState(false);
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [displayListings, setDisplayListings] = useState("verified");
+  const [currentListingId, setCurrentListingId] = useState("");
 
   // Login state
   const [loggedIn, setLoggedIn] = useState(false);
@@ -53,6 +55,11 @@ function App() {
     setShowRegister(false);
   };
 
+  const showVerifyModalHandler = (listingId) => {
+    setShowVerifyModal(true);
+    setCurrentListingId(listingId);
+  };
+
   //Listing Modal state
   const showListingModalHandler = async () => {
     try {
@@ -73,6 +80,8 @@ function App() {
   const closeListingModalHandler = () => {
     setShowListingModal(false);
   };
+
+  //Verify Modal state
 
   // useEffect(() => {
   //   const eventSource = new EventSource("http://localhost:3001/tickets/continuous-updates");
@@ -103,8 +112,16 @@ function App() {
     fetch("/listings/alllistings?verified=true")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setListingData(data.data);
+      });
+  }, []);
+
+  // get all the listings on the server
+  useEffect(() => {
+    fetch("/listings/alllistings?verified=false")
+      .then((response) => response.json())
+      .then((data) => {
+        setUnverifiedListingData(data.data);
       });
   }, []);
 
@@ -114,7 +131,6 @@ function App() {
       fetch("/users/check-cookie")
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           if (data.isLogin) {
             setLoggedIn(true);
             setUserId(data.id);
@@ -185,6 +201,14 @@ function App() {
           content={<RegisterForm envData={backendData} />}
         ></MyModal>
       )}
+
+      <VerifyModal
+        showVerifyModal={showVerifyModal}
+        setShowVerifyModal={setShowVerifyModal}
+        currentListingId={currentListingId}
+        cookies={cookies}
+      ></VerifyModal>
+
       <Container style={{ paddingTop: "10vh" }}>
         <Row>
           {displayListings === "verified" &&
@@ -201,6 +225,20 @@ function App() {
                   title={item.title}
                   imageCover={item.imageCover}
                   listingData={item}
+                  setShowVerifyModal={setShowVerifyModal}
+                />
+              </Col>
+            ))}
+
+          {displayListings === "verify listings" &&
+            unverifiedListingData.map((item, ind) => (
+              <Col md={3} style={{ height: "425px" }} key={ind} className="mb-4 mt-4">
+                <MyCard
+                  key={item._id}
+                  title={item.title}
+                  imageCover={item.imageCover}
+                  listingData={item}
+                  showVerifyModalHandler={showVerifyModalHandler}
                 />
               </Col>
             ))}

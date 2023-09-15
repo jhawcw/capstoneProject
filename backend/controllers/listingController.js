@@ -200,6 +200,7 @@ exports.getOne = catchAsync(async (req, res, next) => {
 
 exports.updateListing = async (req, res) => {
   const formData = req.body;
+  console.log("we came here");
 
   if (req.file) {
     const doc = await listingModel.findOneAndUpdate(
