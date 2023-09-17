@@ -14,6 +14,9 @@ const VerifyModal = (props) => {
           <VerifyForm
             currentListingId={props.currentListingId}
             cookies={props.cookies}
+            userId={props.userId}
+            setUnverifiedListingData={props.setUnverifiedListingData}
+            closeVerifyModalHandler={props.closeVerifyModalHandler}
           ></VerifyForm>
         </Modal.Body>
       </Modal>

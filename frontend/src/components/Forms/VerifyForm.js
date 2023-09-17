@@ -24,6 +24,18 @@ const VerifyForm = (props) => {
         body: form,
       });
       console.log(response);
+      if (response) {
+        fetch(`/listings/allunverifiedlistings?landlord=${props.userId}`, {
+          headers: {
+            authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            props.setUnverifiedListingData(data.data);
+          });
+      }
+      props.closeVerifyModalHandler();
     } catch (err) {
       console.log(err);
     }

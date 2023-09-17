@@ -13,6 +13,7 @@ router.post(
   listingController.createListing
 );
 router.get("/alllistings", listingController.getAll);
+router.get("/allunverifiedlistings", authController.protect, listingController.getAllUnverified);
 router
   .get("/:id", listingController.getOne)
   .patch(

@@ -187,6 +187,18 @@ exports.getAll = catchAsync(async (req, res) => {
   });
 });
 
+exports.getAllUnverified = catchAsync(async (req, res) => {
+  const { landlord } = req.query;
+  const queryObj = { landlord: { $ne: landlord }, verified: false, verifiedBy: { $ne: landlord } };
+  const excludedFields = ["page", "sort", "limit", "fields"];
+  excludedFields.forEach((ele) => delete queryObj[ele]);
+
+  const query = await listingModel.find(queryObj);
+  res.status(200).json({
+    data: query,
+  });
+});
+
 exports.getOne = catchAsync(async (req, res, next) => {
   console.log(req.params.id);
   let query = await listingModel.findById(req.params.id).populate("landlord");
@@ -200,7 +212,6 @@ exports.getOne = catchAsync(async (req, res, next) => {
 
 exports.updateListing = async (req, res) => {
   const formData = req.body;
-  console.log("we came here");
 
   if (req.file) {
     const doc = await listingModel.findOneAndUpdate(

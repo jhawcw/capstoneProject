@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import "./App.css";
-import NavBar from "./components/Navbar/NavBar1";
 import MyModal from "./components/Modals/Modal";
 import RegisterForm from "./components/Forms/RegisterForm";
 import MyCard from "./components/Cards/MyCard";
@@ -60,6 +59,10 @@ function App() {
     setCurrentListingId(listingId);
   };
 
+  const closeVerifyModalHandler = (listingId) => {
+    setShowVerifyModal(false);
+  };
+
   //Listing Modal state
   const showListingModalHandler = async () => {
     try {
@@ -116,14 +119,20 @@ function App() {
       });
   }, []);
 
-  // get all the listings on the server
+  // get all the unverified listings on the server
   useEffect(() => {
-    fetch("/listings/alllistings?verified=false")
-      .then((response) => response.json())
-      .then((data) => {
-        setUnverifiedListingData(data.data);
-      });
-  }, []);
+    if (userId) {
+      fetch(`/listings/allunverifiedlistings?landlord=${userId}`, {
+        headers: {
+          authorization: `Bearer ${cookies["Rent@SG Cookie"]}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setUnverifiedListingData(data.data);
+        });
+    }
+  }, [userId]);
 
   // check if cookie token is present in the browser
   useEffect(() => {
@@ -207,6 +216,9 @@ function App() {
         setShowVerifyModal={setShowVerifyModal}
         currentListingId={currentListingId}
         cookies={cookies}
+        userId={userId}
+        setUnverifiedListingData={setUnverifiedListingData}
+        closeVerifyModalHandler={closeVerifyModalHandler}
       ></VerifyModal>
 
       <Container style={{ paddingTop: "10vh" }}>
@@ -225,7 +237,7 @@ function App() {
                   title={item.title}
                   imageCover={item.imageCover}
                   listingData={item}
-                  setShowVerifyModal={setShowVerifyModal}
+                  userId={userId}
                 />
               </Col>
             ))}
