@@ -155,6 +155,23 @@ function App() {
   //   console.log("running");
   // }, []);
 
+  // to show success message when register as a landlord
+  useEffect(() => {
+    // Capture the query parameter from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get("register");
+
+    // Update the state with the message
+    if (message) {
+      console.log(message);
+      setDisplayListings(message);
+      setTimeout(function () {
+        // Redirect the user to a new URL
+        window.location.href = "/"; // Replace with your desired URL
+      }, 5000);
+    }
+  }, []); // Empty dependency array ensures this effect runs once
+
   // get the env variables for the singpass API
   useEffect(() => {
     fetch("/getEnv")
@@ -186,7 +203,7 @@ function App() {
           setUnverifiedListingData(data.data);
         });
     }
-  }, [userId]);
+  }, [userId, currentListingData]);
 
   // check if cookie token is present in the browser
   useEffect(() => {
@@ -397,6 +414,16 @@ function App() {
             </Row>
           ) : (
             displayListings === "single listing" && <div>Loading...</div>
+          )}
+
+          {displayListings === "success" && (
+            <>
+              <div>
+                Congratulations on registering successfully as a Landlord, you can now login with
+                your fullname and password.
+              </div>
+              <div>You will also be redirected to the homepage in 5 seconds.</div>
+            </>
           )}
         </Row>
       </Container>

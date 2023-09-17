@@ -35,7 +35,7 @@ exports.uploadUserPhoto = upload.single("photo");
 
 exports.landlordRegister = (req, res) => {
   const formData = req.body;
-  console.log("this is the formdata:", formData);
+  // console.log("this is the formdata:", formData);
   let regadd = formData.regadd.split("\r\n");
   let block = regadd[0].trim();
   let address = regadd[1].trim();
@@ -52,6 +52,16 @@ exports.landlordRegister = (req, res) => {
     role: "landlord",
   });
   newUser.save();
+  // res.status(200).json({
+  //   status: "success",
+  //   message:
+  //     "Congratulations your account has been created, please login with your full name and password",
+  //   redirectURL: "http://localhost:3000/",
+  // });
+  res.redirect(302, "http://localhost:3000/?register=success");
+};
+
+exports.sendSuccessfulRegistration = (req, res) => {
   res.status(200).json({
     status: "success",
     message:

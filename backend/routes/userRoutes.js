@@ -4,7 +4,11 @@ const authController = require("../controllers/authController");
 const router = express.Router();
 
 // Landlord register endpoint
-router.post("/landlord/register", userController.landlordRegister);
+router.post(
+  "/landlord/register",
+  userController.landlordRegister,
+  userController.sendSuccessfulRegistration
+);
 // tenant register endpoint
 router.post("/tenant/register", userController.tenantRegister);
 // Admins to get all users endpoint

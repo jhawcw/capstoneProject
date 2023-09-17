@@ -214,7 +214,8 @@ exports.updateListing = async (req, res) => {
   if (req.coverPictureName) {
     req.body.imageCover = req.coverPictureName;
   }
-  if (req.listingPictureName.length > 0) {
+
+  if (req.listingPictureName) {
     req.body.images = req.listingPictureName;
   }
 
