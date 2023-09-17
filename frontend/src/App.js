@@ -226,7 +226,13 @@ function App() {
           {displayListings === "verified" &&
             listingData.map((item, ind) => (
               <Col md={3} style={{ height: "425px" }} key={ind} className="mb-4 mt-4">
-                <MyCard key={item._id} title={item.title} imageCover={item.imageCover} />
+                <MyCard
+                  key={item._id}
+                  title={item.title}
+                  imageCover={item.imageCover}
+                  listingData={item}
+                  userId={userId}
+                />
               </Col>
             ))}
           {displayListings === "my listings" &&

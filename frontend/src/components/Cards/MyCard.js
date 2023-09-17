@@ -4,6 +4,7 @@ import Stack from "react-bootstrap/Stack";
 
 const MyCard = (props) => {
   console.log(props.listingData);
+  console.log(props.userId);
   return (
     <Card style={{ height: "100%" }} className="">
       <Stack gap={3} style={{ height: "100%" }}>
@@ -29,7 +30,9 @@ const MyCard = (props) => {
           <Card.Text>{props.content}</Card.Text>
         </Card.Body>
         <Card.Footer style={{ backgroundColor: "#ffd4cf", height: "13%" }}>
-          {!props.listingData && <MyButton displayText="Rent" cssClass="me-3 btn btn-secondary" />}
+          {props.listingData && props.userId !== props.listingData.landlord[0] && (
+            <MyButton displayText="Rent" cssClass="me-3 btn btn-secondary" />
+          )}
 
           {props.listingData &&
             !props.listingData.verified &&
