@@ -12,6 +12,7 @@ import VerifyModal from "./components/Modals/VerifyModal";
 import Container from "react-bootstrap/esm/Container";
 import Col from "react-bootstrap/esm/Col";
 import Row from "react-bootstrap/esm/Row";
+import Button from "react-bootstrap/esm/Button";
 
 function App() {
   const [backendData, setBackendData] = useState("");
@@ -24,7 +25,9 @@ function App() {
   const [showListingModal, setShowListingModal] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [displayListings, setDisplayListings] = useState("verified");
-  const [currentListingId, setCurrentListingId] = useState("");
+  const [currentListingId, setCurrentListingId] = useState(null);
+  const [currentListingData, setCurrentListingData] = useState({});
+  const [loadingData, setLoadingData] = useState(true);
 
   // Login state
   const [loggedIn, setLoggedIn] = useState(false);
@@ -159,6 +162,20 @@ function App() {
     }
   }, [userId]);
 
+  // get the listing data of the current listing that is currently selected
+  useEffect(() => {
+    if (currentListingId) {
+      fetch(`/listings/${currentListingId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log(data.data);
+          console.log(data.data.data);
+          setCurrentListingData(data.data.data);
+          setLoadingData(false);
+        });
+    }
+  }, [currentListingId]);
+
   return (
     <div style={{ backgroundColor: "#fff1ef" }} className="pb-5">
       <MainNavBar
@@ -232,6 +249,10 @@ function App() {
                   imageCover={item.imageCover}
                   listingData={item}
                   userId={userId}
+                  setDisplayListings={setDisplayListings}
+                  setCurrentListingId={setCurrentListingId}
+                  currentListingId={currentListingId}
+                  setLoadingData={setLoadingData}
                 />
               </Col>
             ))}
@@ -244,6 +265,10 @@ function App() {
                   imageCover={item.imageCover}
                   listingData={item}
                   userId={userId}
+                  setDisplayListings={setDisplayListings}
+                  setCurrentListingId={setCurrentListingId}
+                  currentListingId={currentListingId}
+                  setLoadingData={setLoadingData}
                 />
               </Col>
             ))}
@@ -256,10 +281,56 @@ function App() {
                   title={item.title}
                   imageCover={item.imageCover}
                   listingData={item}
+                  userId={userId}
                   showVerifyModalHandler={showVerifyModalHandler}
+                  setDisplayListings={setDisplayListings}
+                  setCurrentListingId={setCurrentListingId}
+                  currentListingId={currentListingId}
+                  setLoadingData={setLoadingData}
                 />
               </Col>
             ))}
+
+          {displayListings === "single listing" && !loadingData ? (
+            <Row md={12}>
+              <Col md={6}>
+                <img
+                  src={"http://localhost:3001/public/img/listings/" + currentListingData.imageCover}
+                  alt="cover"
+                  style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "cover" }}
+                ></img>
+              </Col>
+              <Col md={6}>
+                <h4>{currentListingData.title}</h4>
+                <hr></hr>
+                <p>
+                  Created On:{" "}
+                  {new Date(currentListingData.createdAt).toLocaleDateString("en-SG", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                  })}
+                </p>
+                <p>Address: {currentListingData.address}</p>
+                <p>Housing Type: {currentListingData.housingType}</p>
+                <p>LandLord Name: {currentListingData.landlord[0].fullName}</p>
+                <p>Monthly Rental Fee: SGD${currentListingData.price}</p>
+                <p>Renting Out: {currentListingData.rentalType}</p>
+                <hr></hr>
+                <p>{currentListingData.description}</p>
+                {currentListingData.landlord[0]._id === userId && (
+                  <Button className="me-3 btn btn-primary">Delete</Button>
+                )}
+                {currentListingData.landlord[0]._id === userId && (
+                  <Button className="me-3 btn btn-primary">Edit</Button>
+                )}
+              </Col>
+            </Row>
+          ) : (
+            displayListings === "single listing" && <div>Loading...</div>
+          )}
         </Row>
       </Container>
     </div>

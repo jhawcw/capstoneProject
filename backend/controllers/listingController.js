@@ -88,7 +88,7 @@ exports.resizeUploads = (req, res, next) => {
         sharp(imageCover.buffer)
           .resize({ width: 2000, height: 1333 })
           .toFormat("jpeg")
-          .jpeg({ quality: 90 }) // Adjust dimensions as needed
+          .jpeg({ quality: 100 }) // Adjust dimensions as needed
           .toFile(`public/img/listings/${req.coverPictureName}`, (err) => {
             if (err) {
               reject(err);

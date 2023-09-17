@@ -3,10 +3,19 @@ import MyButton from "../Buttons/Button";
 import Stack from "react-bootstrap/Stack";
 
 const MyCard = (props) => {
-  console.log(props.listingData);
-  console.log(props.userId);
+  // console.log(props.listingData);
+
+  const cardClickHandler = () => {
+    if (props.currentListingId === props.listingData._id) {
+      props.setLoadingData(false);
+    } else {
+      props.setLoadingData(true);
+    }
+    props.setDisplayListings("single listing");
+    props.setCurrentListingId(props.listingData._id);
+  };
   return (
-    <Card style={{ height: "100%" }} className="">
+    <Card style={{ height: "100%", cursor: "pointer" }} className="" onClick={cardClickHandler}>
       <Stack gap={3} style={{ height: "100%" }}>
         <Card.Img
           variant="top"
