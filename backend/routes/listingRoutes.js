@@ -19,7 +19,8 @@ router
   .patch(
     "/:id",
     authController.protect,
-    listingController.uploadVerificationPhoto,
+    listingController.uploadListingPhoto,
+    listingController.resizeUploads,
     listingController.updateListing
   )
   .delete("/:id", listingController.deleteListing);
@@ -29,6 +30,13 @@ router.post(
   authController.protect,
   listingController.uploadListingPhoto,
   listingController.testUpload
+);
+
+router.patch(
+  "/verifylisting/:id",
+  authController.protect,
+
+  listingController.verifyListing
 );
 
 module.exports = router;

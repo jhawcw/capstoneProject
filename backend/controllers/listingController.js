@@ -211,20 +211,13 @@ exports.getOne = catchAsync(async (req, res, next) => {
 });
 
 exports.updateListing = async (req, res) => {
-  const formData = req.body;
-
-  if (req.file) {
-    const doc = await listingModel.findOneAndUpdate(
-      { _id: req.params.id },
-      { $inc: { verifiedCount: 1 }, $push: { verifiedBy: req.user } },
-      { new: true }
-    );
-
-    return res.status(200).json({
-      status: "success",
-      message: "You've successfully submitted a photo for verification",
-    });
+  if (req.coverPictureName) {
+    req.body.imageCover = req.coverPictureName;
   }
+  if (req.listingPictureName.length > 0) {
+    req.body.images = req.listingPictureName;
+  }
+
   if (req.body) {
     const query = await listingModel.findOneAndUpdate({ _id: req.params.id }, req.body);
     res.status(200).json({
@@ -257,6 +250,18 @@ exports.deleteListing = catchAsync(async (req, res) => {
 
 exports.verifyListing = catchAsync(async (req, res) => {
   const formData = req.body;
+  if (req.file) {
+    const doc = await listingModel.findOneAndUpdate(
+      { _id: req.params.id },
+      { $inc: { verifiedCount: 1 }, $push: { verifiedBy: req.user } },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      status: "success",
+      message: "You've successfully submitted a photo for verification",
+    });
+  }
 });
 
 exports.testUpload = catchAsync(async (req, res) => {

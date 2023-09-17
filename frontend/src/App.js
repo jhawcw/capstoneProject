@@ -13,6 +13,7 @@ import Container from "react-bootstrap/esm/Container";
 import Col from "react-bootstrap/esm/Col";
 import Row from "react-bootstrap/esm/Row";
 import Button from "react-bootstrap/esm/Button";
+import EditListingModal from "./components/Modals/EditListingModal";
 
 function App() {
   const [backendData, setBackendData] = useState("");
@@ -28,6 +29,7 @@ function App() {
   const [currentListingId, setCurrentListingId] = useState(null);
   const [currentListingData, setCurrentListingData] = useState({});
   const [loadingData, setLoadingData] = useState(true);
+  const [showEditListingModal, setShowEditListingModal] = useState(false);
 
   // Login state
   const [loggedIn, setLoggedIn] = useState(false);
@@ -47,6 +49,27 @@ function App() {
   };
   const closeLoginModalHandler = () => {
     setShowLogin(false);
+  };
+
+  const showEditListingModalHandler = () => {
+    console.log(currentListingData);
+    setShowEditListingModal(true);
+    // try {
+    //   fetch("/users/my-profile")
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //       console.log(data);
+    //       setUserAddress(data.address);
+    //       setUserHousingType(data.housingtype);
+    //       setShowEditListingModal(true);
+    //     });
+    // } catch (err) {
+    //   console.log(err);
+    // }
+  };
+
+  const closeEditListingModalHandler = () => {
+    setShowEditListingModal(false);
   };
 
   // Register Modal state
@@ -85,6 +108,34 @@ function App() {
 
   const closeListingModalHandler = () => {
     setShowListingModal(false);
+  };
+
+  const deleteListingHandler = () => {
+    try {
+      fetch(`/listings/${currentListingId}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          // console.log(data);
+          if (data) {
+            fetch("/listings/alllistings?verified=true")
+              .then((response) => response.json())
+              .then((data) => {
+                setListingData(data.data);
+                setDisplayListings("verified");
+              });
+
+            fetch(`/listings/alllistings?landlord=${userId}`)
+              .then((response) => response.json())
+              .then((data) => {
+                setUserListingData(data.data);
+              });
+          }
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   //Verify Modal state
@@ -169,7 +220,7 @@ function App() {
         .then((response) => response.json())
         .then((data) => {
           // console.log(data.data);
-          console.log(data.data.data);
+          // console.log(data.data.data);
           setCurrentListingData(data.data.data);
           setLoadingData(false);
         });
@@ -238,6 +289,17 @@ function App() {
         closeVerifyModalHandler={closeVerifyModalHandler}
       ></VerifyModal>
 
+      <EditListingModal
+        showEditListingModal={showEditListingModal}
+        setShowEditListingModal={setShowEditListingModal}
+        closeEditListingModalHandler={closeEditListingModalHandler}
+        currentListingData={currentListingData}
+        cookies={cookies}
+        userId={userId}
+        setCurrentListingData={setCurrentListingData}
+        setLoadingData={setLoadingData}
+      ></EditListingModal>
+
       <Container style={{ paddingTop: "10vh" }}>
         <Row>
           {displayListings === "verified" &&
@@ -292,12 +354,13 @@ function App() {
             ))}
 
           {displayListings === "single listing" && !loadingData ? (
-            <Row md={12}>
+            <Row md={12} style={{ backgroundColor: "#FFFFFF" }} className="pb-5 pt-5 rounded">
               <Col md={6}>
                 <img
                   src={"http://localhost:3001/public/img/listings/" + currentListingData.imageCover}
                   alt="cover"
                   style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "cover" }}
+                  className="rounded"
                 ></img>
               </Col>
               <Col md={6}>
@@ -321,10 +384,14 @@ function App() {
                 <hr></hr>
                 <p>{currentListingData.description}</p>
                 {currentListingData.landlord[0]._id === userId && (
-                  <Button className="me-3 btn btn-primary">Delete</Button>
+                  <Button className="me-3 btn btn-primary" onClick={deleteListingHandler}>
+                    Delete
+                  </Button>
                 )}
                 {currentListingData.landlord[0]._id === userId && (
-                  <Button className="me-3 btn btn-primary">Edit</Button>
+                  <Button className="me-3 btn btn-secondary" onClick={showEditListingModalHandler}>
+                    Edit
+                  </Button>
                 )}
               </Col>
             </Row>

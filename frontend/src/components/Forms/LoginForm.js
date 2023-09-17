@@ -18,7 +18,7 @@ const LoginForm = (props) => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
+    // console.log(formData);
     try {
       const response = await fetch("http://localhost:3001/users/login", {
         method: "POST",
@@ -30,7 +30,7 @@ const LoginForm = (props) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         props.setUserId(data.userID);
         props.setRole(data.role);
         props.setCookie("Rent@SG Cookie", data.token);
