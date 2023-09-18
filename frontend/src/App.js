@@ -239,6 +239,7 @@ function App() {
           // console.log(data.data);
           // console.log(data.data.data);
           setCurrentListingData(data.data.data);
+          console.log(data.data.data);
           setLoadingData(false);
         });
     }
@@ -380,7 +381,7 @@ function App() {
                   className="rounded"
                 ></img>
               </Col>
-              <Col md={6}>
+              <Col md={6} className="pb-5">
                 <h4>{currentListingData.title}</h4>
                 <hr></hr>
                 <p>
@@ -410,6 +411,50 @@ function App() {
                     Edit
                   </Button>
                 )}
+              </Col>
+              <hr></hr>
+              {/* <Col md={12} className="rounded pt-2" style={{ backgroundColor: "#ffe8e5" }}> */}
+              <Col md={12} className="rounded pt-2" style={{ backgroundColor: "#FFFFFF" }}>
+                <div
+                  style={{ backgroundColor: "#ffe8e5", width: "fit-content" }}
+                  className="rounded p-2"
+                >
+                  <p className="mb-0">
+                    {currentListingData.comments[0].user.fullName}{" "}
+                    <i style={{ fontWeight: "lighter", fontSize: "8px", verticalAlign: "middle" }}>
+                      {" "}
+                      {new Date(currentListingData.comments[0].createdAt).toLocaleDateString(
+                        "en-SG",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
+                        }
+                      )}
+                    </i>
+                    <br />
+                    {currentListingData.comments[0].text}
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    {currentListingData.comments[1].user.fullName} @{" "}
+                    {new Date(currentListingData.comments[1].createdAt).toLocaleDateString(
+                      "en-SG",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "numeric",
+                      }
+                    )}
+                    <br />
+                    {currentListingData.comments[1].text}
+                  </p>
+                </div>
               </Col>
             </Row>
           ) : (

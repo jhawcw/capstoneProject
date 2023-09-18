@@ -201,7 +201,10 @@ exports.getAllUnverified = catchAsync(async (req, res) => {
 
 exports.getOne = catchAsync(async (req, res, next) => {
   console.log(req.params.id);
-  let query = await listingModel.findById(req.params.id).populate("landlord");
+  let query = await listingModel
+    .findById(req.params.id)
+    .populate("landlord")
+    .populate({ path: "comments", populate: { path: "user", model: "User" } });
   res.status(200).json({
     status: "success",
     data: {
