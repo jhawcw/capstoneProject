@@ -9,6 +9,7 @@ const Chatbox = (props) => {
     comment: "",
     id: props.userId,
   });
+  const colRef = useRef();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -45,12 +46,10 @@ const Chatbox = (props) => {
     }
   };
 
-  const colRef = useRef();
-
   useEffect(() => {
     // Scroll to the bottom of the container when it mounts
     colRef.current.scrollTop = colRef.current.scrollHeight;
-  }, []);
+  }, [props.currentListingData.comments]);
 
   return (
     <>
@@ -62,6 +61,8 @@ const Chatbox = (props) => {
           border: "1px solid #ffd4cf",
           maxHeight: "300px",
           overflowY: "auto",
+          display: "flex",
+          flexDirection: "column",
         }}
         ref={colRef}
       >
@@ -69,7 +70,11 @@ const Chatbox = (props) => {
           props.currentListingData.comments.map((ele, ind) => {
             return (
               <div
-                style={{ backgroundColor: "#ffe8e5", width: "fit-content" }}
+                style={{
+                  backgroundColor: props.userId === ele.user._id ? "#febab2" : "#ffe8e5",
+                  width: "fit-content",
+                  alignSelf: props.userId === ele.user._id ? "flex-end" : "flex-start",
+                }}
                 className="rounded p-2 m-3"
                 key={ind}
               >

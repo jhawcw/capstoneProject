@@ -15,6 +15,7 @@ import Row from "react-bootstrap/esm/Row";
 import Button from "react-bootstrap/esm/Button";
 import EditListingModal from "./components/Modals/EditListingModal";
 import Chatbox from "./components/Chatbox/Chatbox";
+import SingleListingPage from "./components/Pages/SingleListingPage";
 
 function App() {
   const [backendData, setBackendData] = useState("");
@@ -143,20 +144,28 @@ function App() {
 
   //Verify Modal state
 
-  // useEffect(() => {
-  //   const eventSource = new EventSource("http://localhost:3001/tickets/continuous-updates");
+  useEffect(() => {
+    let eventSource;
 
-  //   eventSource.onmessage = (event) => {
-  //     const data = JSON.parse(event.data);
-  //     // Handle received updates and update your state
-  //     //setListingData(data);
-  //     console.log(data);
-  //     return () => {
-  //       eventSource.close();
-  //     };
-  //   };
-  //   console.log("running");
-  // }, []);
+    if (currentListingId) {
+      eventSource = new EventSource(
+        `http://localhost:3001/listings/continuous-update/${currentListingId}`
+      );
+
+      eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        // Handle received updates and update your state
+        setCurrentListingData(data.data);
+        setLoadingData(false);
+      };
+      console.log("running");
+    }
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+      }
+    };
+  }, [currentListingId]);
 
   // to show success message when register as a landlord
   useEffect(() => {
@@ -244,19 +253,19 @@ function App() {
   }, [userId]);
 
   // get the listing data of the current listing that is currently selected
-  useEffect(() => {
-    if (currentListingId) {
-      fetch(`/listings/${currentListingId}`)
-        .then((response) => response.json())
-        .then((data) => {
-          // console.log(data.data);
-          // console.log(data.data.data);
-          setCurrentListingData(data.data.data);
-          console.log(data.data.data);
-          setLoadingData(false);
-        });
-    }
-  }, [currentListingId]);
+  // useEffect(() => {
+  //   if (currentListingId) {
+  //     fetch(`/listings/${currentListingId}`)
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         // console.log(data.data);
+  //         // console.log(data.data.data);
+  //         setCurrentListingData(data.data.data);
+  //         console.log(data.data.data);
+  //         setLoadingData(false);
+  //       });
+  //   }
+  // }, [currentListingId]);
 
   return (
     <div style={{ backgroundColor: "#fff1ef" }} className="pb-5">
@@ -386,45 +395,12 @@ function App() {
 
           {displayListings === "single listing" && !loadingData ? (
             <Row md={12} style={{ backgroundColor: "#FFFFFF" }} className="pb-5 pt-5 rounded">
-              <Col md={6}>
-                <img
-                  src={"http://localhost:3001/public/img/listings/" + currentListingData.imageCover}
-                  alt="cover"
-                  style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "cover" }}
-                  className="rounded"
-                ></img>
-              </Col>
-              <Col md={6} className="pb-5">
-                <h4>{currentListingData.title}</h4>
-                <hr></hr>
-                <p>
-                  Created On:{" "}
-                  {new Date(currentListingData.createdAt).toLocaleDateString("en-SG", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                  })}
-                </p>
-                <p>Address: {currentListingData.address}</p>
-                <p>Housing Type: {currentListingData.housingType}</p>
-                <p>LandLord Name: {currentListingData.landlord[0].fullName}</p>
-                <p>Monthly Rental Fee: SGD${currentListingData.price}</p>
-                <p>Renting Out: {currentListingData.rentalType}</p>
-                <hr></hr>
-                <p>{currentListingData.description}</p>
-                {currentListingData.landlord[0]._id === userId && (
-                  <Button className="me-3 btn btn-primary" onClick={deleteListingHandler}>
-                    Delete
-                  </Button>
-                )}
-                {currentListingData.landlord[0]._id === userId && (
-                  <Button className="me-3 btn btn-secondary" onClick={showEditListingModalHandler}>
-                    Edit
-                  </Button>
-                )}
-              </Col>
+              <SingleListingPage
+                userId={userId}
+                currentListingData={currentListingData}
+                showEditListingModalHandler={showEditListingModalHandler}
+                deleteListingHandler={deleteListingHandler}
+              ></SingleListingPage>
               <hr></hr>
               <Chatbox
                 currentListingData={currentListingData}

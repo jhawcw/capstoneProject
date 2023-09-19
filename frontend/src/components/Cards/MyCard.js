@@ -1,9 +1,14 @@
 import Card from "react-bootstrap/Card";
 import MyButton from "../Buttons/Button";
 import Stack from "react-bootstrap/Stack";
+import Button from "react-bootstrap/esm/Button";
 
 const MyCard = (props) => {
   // console.log(props.listingData);
+
+  const buttonHandler = () => {
+    console.log("hello");
+  };
 
   const cardClickHandler = () => {
     if (props.currentListingId === props.listingData._id) {
@@ -40,7 +45,14 @@ const MyCard = (props) => {
         </Card.Body>
         <Card.Footer style={{ backgroundColor: "#ffd4cf", height: "13%" }}>
           {props.listingData && props.userId !== props.listingData.landlord[0] && (
-            <MyButton displayText="Rent" cssClass="me-3 btn btn-secondary" />
+            // <MyButton
+            //   displayText="Rent"
+            //   cssClass="me-3 btn btn-secondary"
+            //   clickHandler={() => console.log("hello")}
+            // />
+            <Button className="me-3 btn btn-secondary" onClick={buttonHandler}>
+              Rent
+            </Button>
           )}
 
           {props.listingData &&

@@ -75,7 +75,7 @@ exports.resizeUploads = (req, res, next) => {
   }
 
   const promises = [];
-  req.coverPictureName = "jason";
+  // req.coverPictureName = "jason";
   req.listingPictureName = [];
 
   if (req.files.imageCover) {
@@ -221,6 +221,7 @@ exports.updateListing = async (req, res) => {
   if (req.listingPictureName) {
     req.body.images = req.listingPictureName;
   }
+  console.log(req.body);
 
   if (req.body) {
     const query = await listingModel.findOneAndUpdate({ _id: req.params.id }, req.body);
@@ -275,3 +276,61 @@ exports.testUpload = catchAsync(async (req, res) => {
     status: "success",
   });
 });
+
+exports.continuousNewData = async (req, res) => {
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    Connection: "keep-alive",
+  });
+
+  const sendSSE = (data) => {
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
+  };
+
+  const listing = await listingModel
+    .findById(req.params.id)
+    .populate("landlord")
+    .populate({ path: "comments", populate: { path: "user", model: "User" } });
+
+  // You can customize the logic below to send SSE updates
+  const interval = setInterval(() => {
+    listingModel
+      .findById(req.params.id)
+      .populate("landlord")
+      .populate({ path: "comments", populate: { path: "user", model: "User" } })
+
+      .then((listing) => {
+        sendSSE({
+          status: "Updated data",
+          timestamp: new Date().toISOString(),
+          data: listing,
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching initial data:", error);
+      });
+  }, 5000);
+  // Send updates every 5 seconds
+
+  // Send initial data immediately
+  listingModel
+    .findById(req.params.id)
+    .populate("landlord")
+    .populate({ path: "comments", populate: { path: "user", model: "User" } })
+    .then((listing) => {
+      sendSSE({
+        status: "initial_data",
+        data: listing,
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching initial data:", error);
+    });
+
+  // Clean up on client disconnect or when the request is closed
+  req.on("close", () => {
+    clearInterval(interval);
+    res.end();
+  });
+};

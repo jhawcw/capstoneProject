@@ -32,11 +32,8 @@ router.post(
   listingController.testUpload
 );
 
-router.patch(
-  "/verifylisting/:id",
-  authController.protect,
+router.patch("/verifylisting/:id", authController.protect, listingController.verifyListing);
 
-  listingController.verifyListing
-);
+router.get("/continuous-update/:id", listingController.continuousNewData);
 
 module.exports = router;

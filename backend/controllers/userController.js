@@ -159,7 +159,7 @@ exports.getProfile = async (req, res) => {
       const decoded = await promisify(jwt.verify)(req.cookies[cookieName], process.env.JWT_SECRET);
       const currentUser = await userModel.findById(decoded.id);
 
-      console.log(currentUser);
+      // console.log(currentUser);
 
       res.status(200).json({
         status: "success",
