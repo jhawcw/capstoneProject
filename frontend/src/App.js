@@ -14,6 +14,7 @@ import Col from "react-bootstrap/esm/Col";
 import Row from "react-bootstrap/esm/Row";
 import Button from "react-bootstrap/esm/Button";
 import EditListingModal from "./components/Modals/EditListingModal";
+import Chatbox from "./components/Chatbox/Chatbox";
 
 function App() {
   const [backendData, setBackendData] = useState("");
@@ -37,6 +38,7 @@ function App() {
   const [role, setRole] = useState("");
   const [userAddress, setUserAddress] = useState("");
   const [userHousingType, setUserHousingType] = useState("");
+  const [userName, setUserName] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies(["Rent@SG Cookie"]);
   const loginHandler = () => setLoggedIn(true);
   const logoutHandler = () => setLoggedIn(false);
@@ -98,6 +100,7 @@ function App() {
           console.log(data);
           setUserAddress(data.address);
           setUserHousingType(data.housingtype);
+          setUserName(data.fullname);
           setShowListingModal(true);
         });
     } catch (err) {
@@ -180,6 +183,16 @@ function App() {
         setBackendData(data);
       });
   }, []);
+
+  useEffect(() => {
+    if (userId) {
+      fetch("/users/my-profile")
+        .then((res) => res.json())
+        .then((data) => {
+          setUserName(data.fullname);
+        });
+    }
+  }, [userId]);
 
   // get all the listings on the server
   useEffect(() => {
@@ -413,49 +426,12 @@ function App() {
                 )}
               </Col>
               <hr></hr>
-              {/* <Col md={12} className="rounded pt-2" style={{ backgroundColor: "#ffe8e5" }}> */}
-              <Col md={12} className="rounded pt-2" style={{ backgroundColor: "#FFFFFF" }}>
-                <div
-                  style={{ backgroundColor: "#ffe8e5", width: "fit-content" }}
-                  className="rounded p-2"
-                >
-                  <p className="mb-0">
-                    {currentListingData.comments[0].user.fullName}{" "}
-                    <i style={{ fontWeight: "lighter", fontSize: "8px", verticalAlign: "middle" }}>
-                      {" "}
-                      {new Date(currentListingData.comments[0].createdAt).toLocaleDateString(
-                        "en-SG",
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                          hour: "numeric",
-                          minute: "numeric",
-                        }
-                      )}
-                    </i>
-                    <br />
-                    {currentListingData.comments[0].text}
-                  </p>
-                </div>
-                <div>
-                  <p>
-                    {currentListingData.comments[1].user.fullName} @{" "}
-                    {new Date(currentListingData.comments[1].createdAt).toLocaleDateString(
-                      "en-SG",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "numeric",
-                        minute: "numeric",
-                      }
-                    )}
-                    <br />
-                    {currentListingData.comments[1].text}
-                  </p>
-                </div>
-              </Col>
+              <Chatbox
+                currentListingData={currentListingData}
+                userName={userName}
+                cookies={cookies}
+                userId={userId}
+              ></Chatbox>
             </Row>
           ) : (
             displayListings === "single listing" && <div>Loading...</div>
