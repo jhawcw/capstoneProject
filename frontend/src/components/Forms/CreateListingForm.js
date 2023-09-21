@@ -17,6 +17,7 @@ const CreateListingForm = (props) => {
 
   const imageCoverInputRef = useRef(null);
   const imagesInputRef = useRef(null);
+  const agreementInputRef = useRef(null);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -53,6 +54,10 @@ const CreateListingForm = (props) => {
       form.append(`images`, image);
     });
 
+    const agreementForm = new FormData();
+    agreementForm.append("agreement", agreementInputRef.current.files[0]);
+    let newId;
+
     try {
       const response = await fetch("http://localhost:3001/listings/create", {
         method: "POST",
@@ -60,8 +65,26 @@ const CreateListingForm = (props) => {
           authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
         },
         body: form,
-      });
-      console.log(response);
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          newId = data.newListingId;
+          console.log(newId);
+        })
+        .then(async () => {
+          const response2 = await fetch(`http://localhost:3001/listings/agreement/${newId}`, {
+            method: "POST",
+            headers: {
+              authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
+            },
+            body: agreementForm,
+          });
+
+          // let newData = await response2.json();
+          // console.log(newData);
+        });
+
       if (response) {
         fetch(`/listings/alllistings?landlord=${props.userId}`)
           .then((response) => response.json())
@@ -73,7 +96,7 @@ const CreateListingForm = (props) => {
       console.log(err);
     }
 
-    props.closeListingModalHandler();
+    // props.closeListingModalHandler();
   };
 
   return (
@@ -180,6 +203,15 @@ const CreateListingForm = (props) => {
               name="images"
               ref={imagesInputRef}
             />
+          </Form.Group>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+          <Form.Group className="mb-3" controlId="formFileAgreement">
+            <Form.Label>Submit Tenancy Agreement</Form.Label>
+            <Form.Control type="file" accept=".pdf" name="agreement" ref={agreementInputRef} />
           </Form.Group>
         </Col>
       </Row>

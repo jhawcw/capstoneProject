@@ -26,10 +26,10 @@ router
   .delete("/:id", listingController.deleteListing);
 
 router.post(
-  "/testupload",
+  "/agreement/:id",
   authController.protect,
-  listingController.uploadListingPhoto,
-  listingController.testUpload
+  listingController.uploadTenancyAgreement,
+  listingController.updateListingAgreement
 );
 
 router.patch("/verifylisting/:id", authController.protect, listingController.verifyListing);

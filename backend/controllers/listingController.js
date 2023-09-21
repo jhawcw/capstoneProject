@@ -19,14 +19,14 @@ const multerStorage = multer.diskStorage({
 });
 const multerStorage2 = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "public/img/listings");
+    cb(null, "public/agreements");
   },
   filename: (req, file, cb) => {
     // user-76767676abc76dba-3332222332.jpeg
     // user-userID-timestamp-fileextension
-
-    const extension = file.mimetype.split("/")[1];
-    cb(null, `user-${req.user.id}-${Date.now()}-${Math.floor(Math.random() * 10000)}.${extension}`);
+    // console.log(file.mimetype);
+    // const extension = file.mimetype.split("/")[1];
+    cb(null, `user-${req.user.id}-${Date.now()}-${Math.floor(Math.random() * 10000)}.pdf`);
     //cb(null, `user--${Date.now()}.${extension}`);
   },
 });
@@ -46,7 +46,11 @@ const upload = multer({
 const multerStorage3 = multer.memoryStorage();
 const upload2 = multer({
   storage: multerStorage3,
-  fileFilter: multerFilter,
+  // fileFilter: multerFilter,
+});
+
+const upload3 = multer({
+  storage: multerStorage2,
 });
 
 // This function resizes the image to a specific dimension
@@ -68,6 +72,7 @@ exports.uploadListingPhoto = upload2.fields([
   { name: "imageCover", maxCount: 1 },
   { name: "images", maxCount: 3 },
 ]);
+exports.uploadTenancyAgreement = upload3.single("agreement");
 
 exports.resizeUploads = (req, res, next) => {
   if (!req.files || (!req.files.imageCover && !req.files.images)) {
@@ -137,7 +142,7 @@ exports.resizeUploads = (req, res, next) => {
 
 // Multer configuration to upload user photo into server's filesystem, (NOT DATABASE) end
 
-exports.createListing = (req, res) => {
+exports.createListing = async (req, res) => {
   const formData = req.body;
 
   // console.log(req.coverPictureName);
@@ -168,11 +173,17 @@ exports.createListing = (req, res) => {
     });
   }
 
-  newListing.save();
-  res.status(200).json({
-    status: "success",
-    message: "Congratulations your listing has been created",
-  });
+  try {
+    const savedListing = await newListing.save();
+    res.status(200).json({
+      status: "success",
+      message: "Congratulations your listing has been created",
+      newListingId: savedListing._id,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
   console.log("listing successfully created");
 };
 
@@ -221,6 +232,7 @@ exports.updateListing = async (req, res) => {
   if (req.listingPictureName) {
     req.body.images = req.listingPictureName;
   }
+
   console.log(req.body);
 
   if (req.body) {
@@ -269,8 +281,12 @@ exports.verifyListing = catchAsync(async (req, res) => {
   }
 });
 
-exports.testUpload = catchAsync(async (req, res) => {
-  console.log(req.body);
+exports.updateListingAgreement = catchAsync(async (req, res) => {
+  const result = await listingModel.findByIdAndUpdate(
+    req.params.id,
+    { agreement: req.file.filename },
+    { new: true }
+  );
 
   res.status(200).json({
     status: "success",

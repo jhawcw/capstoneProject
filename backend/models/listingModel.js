@@ -21,6 +21,9 @@ const listingSchema = new mongoose.Schema({
     //required: [true, "A listing must have images"],
   },
   images: [String],
+  agreement: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
