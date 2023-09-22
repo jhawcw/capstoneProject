@@ -100,10 +100,12 @@ const CreateListingForm = (props) => {
   };
 
   const downloadAgreementHandler = () => {
+    const filename = "Tenancy-Agreement-Sample.pdf";
+    const backendUrl = `http://localhost:3001/listings/download/${filename}`;
     const link = document.createElement("a");
-    link.href = "http://localhost:3001/listings/download-sample";
+    link.href = backendUrl;
     link.target = "_blank";
-    // link.download = filename;
+    link.download = filename;
     link.click();
   };
 
@@ -219,10 +221,22 @@ const CreateListingForm = (props) => {
         <Col>
           <Form.Group className="mb-3" controlId="formFileAgreement">
             <Form.Label>Submit Tenancy Agreement</Form.Label>
-
-            <Form.Control type="file" accept=".pdf" name="agreement" ref={agreementInputRef} />
+            <div className="d-flex align-items-center">
+              <Form.Control
+                type="file"
+                accept=".pdf"
+                name="agreement"
+                ref={agreementInputRef}
+              ></Form.Control>
+              <Button
+                onClick={downloadAgreementHandler}
+                className="ms-3 btn-sm pt-2 pb-2"
+                style={{ minWidth: "20%" }}
+              >
+                Download Sample
+              </Button>
+            </div>
             {/* <a download={}></a> */}
-            <Button onClick={downloadAgreementHandler}>Download Tenancy Agreement Sample</Button>
           </Form.Group>
         </Col>
       </Row>

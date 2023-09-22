@@ -353,9 +353,9 @@ exports.continuousNewData = async (req, res) => {
 };
 
 exports.downloadSampleAgreement = (req, res) => {
-  // const filename = req.params.filename;
-  console.log("came here");
-  const filePath = `public/agreements/Tenancy-Agreement-Sample.pdf`; // Replace with the actual path to your file
+  const filename = req.params.filename;
+  console.log(filename);
+  const filePath = `public/agreements/${filename}`; // Replace with the actual path to your file
 
   // Check if the file exists
   if (fs.existsSync(filePath)) {
