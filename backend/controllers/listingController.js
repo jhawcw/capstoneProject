@@ -2,6 +2,7 @@ const multer = require("multer");
 const sharp = require("sharp");
 const listingModel = require("../models/listingModel");
 const catchAsync = require("../utils/catchAsync");
+const fs = require("fs");
 
 // Multer configuration to upload user photo into server's filesystem, (NOT DATABASE) start
 
@@ -349,4 +350,22 @@ exports.continuousNewData = async (req, res) => {
     clearInterval(interval);
     res.end();
   });
+};
+
+exports.downloadSampleAgreement = (req, res) => {
+  // const filename = req.params.filename;
+  console.log("came here");
+  const filePath = `public/agreements/Tenancy-Agreement-Sample.pdf`; // Replace with the actual path to your file
+
+  // Check if the file exists
+  if (fs.existsSync(filePath)) {
+    // Set the appropriate content-type for the file
+    res.contentType("application/octet-stream");
+
+    // Create a read stream from the file and pipe it to the response
+    const fileStream = fs.createReadStream(filePath);
+    fileStream.pipe(res);
+  } else {
+    res.status(404).send("File not found");
+  }
 };

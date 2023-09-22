@@ -99,6 +99,14 @@ const CreateListingForm = (props) => {
     // props.closeListingModalHandler();
   };
 
+  const downloadAgreementHandler = () => {
+    const link = document.createElement("a");
+    link.href = "http://localhost:3001/listings/download-sample";
+    link.target = "_blank";
+    // link.download = filename;
+    link.click();
+  };
+
   return (
     <Form onSubmit={handleSubmit}>
       <Row>
@@ -211,7 +219,10 @@ const CreateListingForm = (props) => {
         <Col>
           <Form.Group className="mb-3" controlId="formFileAgreement">
             <Form.Label>Submit Tenancy Agreement</Form.Label>
+
             <Form.Control type="file" accept=".pdf" name="agreement" ref={agreementInputRef} />
+            {/* <a download={}></a> */}
+            <Button onClick={downloadAgreementHandler}>Download Tenancy Agreement Sample</Button>
           </Form.Group>
         </Col>
       </Row>

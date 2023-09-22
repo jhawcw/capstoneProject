@@ -5,6 +5,7 @@ const authController = require("../controllers/authController");
 
 const router = express.Router();
 
+router.get("/download-sample", listingController.downloadSampleAgreement);
 router.post(
   "/create",
   authController.protect,
