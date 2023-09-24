@@ -17,6 +17,7 @@ const EditListingForm = (props) => {
 
   const imageCoverInputRef = useRef(null);
   const imagesInputRef = useRef(null);
+  const agreementInputRef = useRef(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -42,6 +43,9 @@ const EditListingForm = (props) => {
     //   }
     // });
 
+    const agreementForm = new FormData();
+    agreementForm.append("agreement", agreementInputRef.current.files[0]);
+
     try {
       const response = await fetch(
         `http://localhost:3001/listings/${props.currentListingData._id}`,
@@ -66,6 +70,16 @@ const EditListingForm = (props) => {
       console.log(err);
     }
 
+    if (agreementInputRef.current.files.length > 0) {
+      await fetch(`http://localhost:3001/listings/agreement/${props.currentListingData._id}`, {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
+        },
+        body: agreementForm,
+      });
+    }
+
     props.closeEditListingModalHandler();
   };
 
@@ -87,6 +101,16 @@ const EditListingForm = (props) => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const downloadAgreementHandler = () => {
+    const filename = "Tenancy-Agreement-Sample.pdf";
+    const backendUrl = `http://localhost:3001/listings/download/${filename}`;
+    const link = document.createElement("a");
+    link.href = backendUrl;
+    link.target = "_blank";
+    link.download = filename;
+    link.click();
   };
 
   return (
@@ -193,6 +217,30 @@ const EditListingForm = (props) => {
               name="images"
               ref={imagesInputRef}
             />
+          </Form.Group>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+          <Form.Group className="mb-3" controlId="formFileAgreement">
+            <Form.Label>Submit Tenancy Agreement</Form.Label>
+            <div className="d-flex align-items-center">
+              <Form.Control
+                type="file"
+                accept=".pdf"
+                name="agreement"
+                ref={agreementInputRef}
+              ></Form.Control>
+              <Button
+                onClick={downloadAgreementHandler}
+                className="ms-3 btn-sm pt-2 pb-2"
+                style={{ minWidth: "20%" }}
+              >
+                Download Sample
+              </Button>
+            </div>
+            {/* <a download={}></a> */}
           </Form.Group>
         </Col>
       </Row>
