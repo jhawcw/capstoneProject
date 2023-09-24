@@ -402,12 +402,14 @@ function App() {
                 deleteListingHandler={deleteListingHandler}
               ></SingleListingPage>
               <hr></hr>
-              <Chatbox
-                currentListingData={currentListingData}
-                userName={userName}
-                cookies={cookies}
-                userId={userId}
-              ></Chatbox>
+              {loggedIn ? (
+                <Chatbox
+                  currentListingData={currentListingData}
+                  userName={userName}
+                  cookies={cookies}
+                  userId={userId}
+                ></Chatbox>
+              ) : null}
             </Row>
           ) : (
             displayListings === "single listing" && <div>Loading...</div>
