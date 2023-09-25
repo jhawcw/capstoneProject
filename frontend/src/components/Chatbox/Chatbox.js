@@ -105,7 +105,7 @@ const Chatbox = (props) => {
         <div style={{ backgroundColor: "", width: "100%" }} className="rounded">
           <Form onSubmit={handleSubmit}>
             <Row>
-              <Col md={10}>
+              <Col md={10} style={{ padding: 0 }}>
                 <Form.Group className="mb-3" controlId="formBasicTitle" md={10}>
                   <Form.Label className="d-none">{props.userName}</Form.Label>
                   <Form.Control
@@ -118,8 +118,17 @@ const Chatbox = (props) => {
                   />
                 </Form.Group>
               </Col>
-              <Col md={2}>
-                <Button className="fw-bold" type="submit">
+              <Col
+                md={2}
+                style={{
+                  padding: "0px 0px 0px 15px",
+                  //   display: "flex",
+                  //   // justifyContent: "center",
+                  //   alignItems: "center",
+                }}
+                className=""
+              >
+                <Button className="fw-bold w-100" type="submit">
                   Comment!
                 </Button>
               </Col>

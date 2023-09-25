@@ -32,6 +32,7 @@ function App() {
   const [currentListingData, setCurrentListingData] = useState({});
   const [loadingData, setLoadingData] = useState(true);
   const [showEditListingModal, setShowEditListingModal] = useState(false);
+  const [selectedListingPDFUrl, setSelectedListingPDFUrl] = useState("");
 
   // Login state
   const [loggedIn, setLoggedIn] = useState(false);
@@ -55,7 +56,7 @@ function App() {
   };
 
   const showEditListingModalHandler = () => {
-    console.log(currentListingData);
+    // console.log(currentListingData);
     setShowEditListingModal(true);
     // try {
     //   fetch("/users/my-profile")
@@ -252,6 +253,28 @@ function App() {
     }
   }, [userId]);
 
+  useEffect(() => {
+    if (currentListingId) {
+      fetch(`http://localhost:3001/listings/myagreement/${currentListingId}`, {
+        method: "GET",
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.blob();
+          } else {
+            throw new Error(`HTTP status ${response.status}`);
+          }
+        })
+        .then((blob) => {
+          const url = URL.createObjectURL(blob);
+          setSelectedListingPDFUrl(url);
+        })
+        .catch((error) => {
+          setSelectedListingPDFUrl("");
+        });
+    }
+  }, [currentListingId]);
+
   // get the listing data of the current listing that is currently selected
   // useEffect(() => {
   //   if (currentListingId) {
@@ -338,6 +361,7 @@ function App() {
         userId={userId}
         setCurrentListingData={setCurrentListingData}
         setLoadingData={setLoadingData}
+        selectedListingPDFUrl={selectedListingPDFUrl}
       ></EditListingModal>
 
       <Container style={{ paddingTop: "10vh" }}>

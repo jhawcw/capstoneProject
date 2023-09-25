@@ -9,7 +9,7 @@ const SingleListingPage = (props) => {
   const handleSelect = (selectedIndex) => {
     setIndex(selectedIndex);
   };
-  console.log(props.currentListingData);
+  // console.log(props.currentListingData);
   return (
     <>
       <Col md={6}>

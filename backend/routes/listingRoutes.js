@@ -34,6 +34,7 @@ router.post(
 );
 
 router.patch("/verifylisting/:id", authController.protect, listingController.verifyListing);
+router.get("/myagreement/:id", listingController.myAgreement);
 
 router.get("/continuous-update/:id", listingController.continuousNewData);
 

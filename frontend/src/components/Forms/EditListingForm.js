@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -112,6 +112,41 @@ const EditListingForm = (props) => {
     link.download = filename;
     link.click();
   };
+
+  // const fetchPdf = () => {
+  //   // Replace 'backend-url' with the actual URL of your backend's PDF endpoint
+  //   fetch(`http://localhost:3001/listings/myagreement/${props.currentListingData._id}`, {
+  //     method: "GET",
+  //   })
+  //     .then((response) => response.blob())
+  //     .then((blob) => {
+  //       const url = URL.createObjectURL(blob);
+  //       setPdfUrl(url);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching PDF:", error);
+  //     });
+  // };
+
+  // useEffect(() => {
+  //   fetch(`http://localhost:3001/listings/myagreement/${props.currentListingData._id}`, {
+  //     method: "GET",
+  //   })
+  //     .then((response) => {
+  //       if (response.status === 200) {
+  //         return response.blob();
+  //       } else {
+  //         throw new Error(`HTTP status ${response.status}`);
+  //       }
+  //     })
+  //     .then((blob) => {
+  //       const url = URL.createObjectURL(blob);
+  //       setPdfUrl(url);
+  //     })
+  //     .catch((error) => {
+  //       setPdfUrl("");
+  //     });
+  // }, []);
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -240,7 +275,22 @@ const EditListingForm = (props) => {
                 Download Sample
               </Button>
             </div>
-            {/* <a download={}></a> */}
+          </Form.Group>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+          <Form.Group className="mb-3" controlId="formOriginalAgreement">
+            <Form.Label>Current Tenancy Agreement</Form.Label>
+            {props.selectedListingPDFUrl && (
+              <embed
+                src={props.selectedListingPDFUrl}
+                type="application/pdf"
+                width="100%"
+                height={props.selectedListingPDFUrl ? "600px" : "200px"}
+              />
+            )}
           </Form.Group>
         </Col>
       </Row>

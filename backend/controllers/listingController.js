@@ -2,6 +2,7 @@ const multer = require("multer");
 const sharp = require("sharp");
 const listingModel = require("../models/listingModel");
 const catchAsync = require("../utils/catchAsync");
+const path = require("path");
 const fs = require("fs");
 
 // Multer configuration to upload user photo into server's filesystem, (NOT DATABASE) start
@@ -367,5 +368,33 @@ exports.downloadSampleAgreement = (req, res) => {
     fileStream.pipe(res);
   } else {
     res.status(404).send("File not found");
+  }
+};
+
+exports.myAgreement = async (req, res) => {
+  const listingId = req.params.id;
+
+  const pdfName = await listingModel.findById(listingId);
+  console.log("hello");
+  console.log(pdfName.agreement);
+  // Replace 'pdf-directory' with the actual directory where your PDF files are stored
+  const pdfDirectory = path.join(__dirname, "..", "public", "agreements");
+
+  // Construct the path to the PDF file based on the listing ID
+  if (pdfName.agreement) {
+    const pdfPath = path.join(pdfDirectory, `${pdfName.agreement}`);
+
+    // Check if the file exists
+    if (fs.existsSync(pdfPath)) {
+      // Set the content type to PDF
+      res.contentType("application/pdf");
+
+      // Stream the PDF file to the response
+      const stream = fs.createReadStream(pdfPath);
+      stream.pipe(res);
+    }
+  } else {
+    // PDF file not found, send a 404 response
+    res.status(404).send("This listing does not have a Tenancy agreement");
   }
 };

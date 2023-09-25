@@ -31,6 +31,7 @@ const EditListingModal = (props) => {
             userId={props.userId}
             cookies={props.cookies}
             setLoadingData={props.setLoadingData}
+            selectedListingPDFUrl={props.selectedListingPDFUrl}
           ></EditListingForm>
         </Modal.Body>
       </Modal>
