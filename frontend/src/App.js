@@ -12,7 +12,6 @@ import VerifyModal from "./components/Modals/VerifyModal";
 import Container from "react-bootstrap/esm/Container";
 import Col from "react-bootstrap/esm/Col";
 import Row from "react-bootstrap/esm/Row";
-import Button from "react-bootstrap/esm/Button";
 import EditListingModal from "./components/Modals/EditListingModal";
 import Chatbox from "./components/Chatbox/Chatbox";
 import SingleListingPage from "./components/Pages/SingleListingPage";

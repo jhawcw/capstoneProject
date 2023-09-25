@@ -73,7 +73,7 @@ const CreateListingForm = (props) => {
           console.log(newId);
         })
         .then(async () => {
-          const response2 = await fetch(`http://localhost:3001/listings/agreement/${newId}`, {
+          await fetch(`http://localhost:3001/listings/agreement/${newId}`, {
             method: "POST",
             headers: {
               authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,

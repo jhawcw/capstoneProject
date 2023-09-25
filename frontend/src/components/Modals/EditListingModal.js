@@ -1,5 +1,4 @@
 import Modal from "react-bootstrap/Modal";
-import CreateListingForm from "../Forms/CreateListingForm";
 import EditListingForm from "../Forms/EditListingForm";
 
 const EditListingModal = (props) => {
@@ -16,14 +15,6 @@ const EditListingModal = (props) => {
           <Modal.Title id="example-custom-modal-styling-title">Edit Your Listing</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* <CreateListingForm
-            closeListingModalHandler={props.closeListingModalHandler}
-            userAddress={props.userAddress}
-            userHousingType={props.userHousingType}
-            userId={props.userId}
-            cookies={props.cookies}
-            setUserListingData={props.setUserListingData}
-          ></CreateListingForm> */}
           <EditListingForm
             setCurrentListingData={props.setCurrentListingData}
             currentListingData={props.currentListingData}

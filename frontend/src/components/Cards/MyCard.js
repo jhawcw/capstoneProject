@@ -6,7 +6,8 @@ import Button from "react-bootstrap/esm/Button";
 const MyCard = (props) => {
   // console.log(props.listingData);
 
-  const buttonHandler = () => {
+  const buttonHandler = (event) => {
+    event.stopPropagation();
     console.log("hello");
   };
 
