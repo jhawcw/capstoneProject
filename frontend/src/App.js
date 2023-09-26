@@ -316,6 +316,7 @@ function App() {
         envData={backendData}
         setDisplayListings={setDisplayListings}
         showProfileModalHandler={showProfileModalHandler}
+        role={role}
       ></MainNavBar>
 
       <ListingModal

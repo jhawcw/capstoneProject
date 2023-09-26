@@ -48,7 +48,7 @@ const MainNavBar = (props) => {
               </Nav.Link>
             ) : null}
             {props.isLoggedIn ? <Nav.Link className="fs-5">Applications</Nav.Link> : null}
-            {props.isLoggedIn ? (
+            {props.isLoggedIn && props.role !== "admin" ? (
               <Nav.Link
                 className="fs-5"
                 onClick={() => props.setDisplayListings("verify listings")}
@@ -56,12 +56,12 @@ const MainNavBar = (props) => {
                 Verify Listings
               </Nav.Link>
             ) : null}
-            {props.isLoggedIn ? (
+            {props.isLoggedIn && props.role !== "user" ? (
               <Nav.Link className="fs-5" onClick={() => props.setDisplayListings("my listings")}>
                 My Listings
               </Nav.Link>
             ) : null}
-            {props.isLoggedIn ? (
+            {props.isLoggedIn && props.role !== "user" ? (
               <Nav.Link className="fs-5" onClick={props.showListingModalHandler}>
                 Create Listing
               </Nav.Link>
