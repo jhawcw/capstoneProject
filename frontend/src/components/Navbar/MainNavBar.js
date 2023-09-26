@@ -47,6 +47,7 @@ const MainNavBar = (props) => {
                 Register
               </Nav.Link>
             ) : null}
+            {props.isLoggedIn ? <Nav.Link className="fs-5">Applications</Nav.Link> : null}
             {props.isLoggedIn ? (
               <Nav.Link
                 className="fs-5"
@@ -65,7 +66,11 @@ const MainNavBar = (props) => {
                 Create Listing
               </Nav.Link>
             ) : null}
-            {props.isLoggedIn ? <Nav.Link className="fs-5">Profile</Nav.Link> : null}
+            {props.isLoggedIn ? (
+              <Nav.Link className="fs-5" onClick={props.showProfileModalHandler}>
+                Profile
+              </Nav.Link>
+            ) : null}
             {props.isLoggedIn ? (
               <Nav.Link className="fs-5" onClick={logoutHandler}>
                 Log out

@@ -15,6 +15,7 @@ import Row from "react-bootstrap/esm/Row";
 import EditListingModal from "./components/Modals/EditListingModal";
 import Chatbox from "./components/Chatbox/Chatbox";
 import SingleListingPage from "./components/Pages/SingleListingPage";
+import ProfileModal from "./components/Modals/ProfileModal";
 
 function App() {
   const [backendData, setBackendData] = useState("");
@@ -26,6 +27,7 @@ function App() {
   const [showRegister, setShowRegister] = useState(false);
   const [showListingModal, setShowListingModal] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const [displayListings, setDisplayListings] = useState("verified");
   const [currentListingId, setCurrentListingId] = useState(null);
   const [currentListingData, setCurrentListingData] = useState({});
@@ -37,6 +39,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [userId, setUserId] = useState(null);
   const [role, setRole] = useState("");
+  const [sex, setSex] = useState("");
   const [userAddress, setUserAddress] = useState("");
   const [userHousingType, setUserHousingType] = useState("");
   const [userName, setUserName] = useState("");
@@ -52,6 +55,15 @@ function App() {
   };
   const closeLoginModalHandler = () => {
     setShowLogin(false);
+  };
+
+  const showProfileModalHandler = () => {
+    setShowProfileModal(true);
+    console.log(role);
+  };
+
+  const closeProfileModalHandler = () => {
+    setShowProfileModal(false);
   };
 
   const showEditListingModalHandler = () => {
@@ -236,6 +248,9 @@ function App() {
           if (data.isLogin) {
             setLoggedIn(true);
             setUserId(data.id);
+            setRole(data.role);
+            setUserName(data.fullname);
+            setSex(data.sex);
           }
         });
     }
@@ -300,6 +315,7 @@ function App() {
         logoutHandler={logoutHandler}
         envData={backendData}
         setDisplayListings={setDisplayListings}
+        showProfileModalHandler={showProfileModalHandler}
       ></MainNavBar>
 
       <ListingModal
@@ -362,6 +378,14 @@ function App() {
         setLoadingData={setLoadingData}
         selectedListingPDFUrl={selectedListingPDFUrl}
       ></EditListingModal>
+
+      <ProfileModal
+        showProfileModal={showProfileModal}
+        closeProfileModalHandler={closeProfileModalHandler}
+        role={role}
+        userName={userName}
+        sex={sex}
+      ></ProfileModal>
 
       <Container style={{ paddingTop: "10vh" }}>
         <Row>

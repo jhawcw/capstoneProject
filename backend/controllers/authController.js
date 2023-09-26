@@ -94,6 +94,9 @@ exports.checkCookie = async (req, res) => {
           message: "User is logged in",
           isLogin: true,
           id: currentUser.id,
+          role: currentUser.role,
+          fullname: currentUser.fullName,
+          sex: currentUser.sex,
         });
       } else {
         res.status(404).json({
