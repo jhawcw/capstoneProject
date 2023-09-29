@@ -74,8 +74,9 @@ exports.myApplications = async (req, res) => {
   } else if (req.user.role === "user") {
     try {
       const applications = await applicationModel
-        .find({ listing: req.user._id })
+        .find({ tenant: req.user._id })
         .populate("listing");
+      console.log(applications);
 
       res.status(200).json({
         status: "success",
@@ -86,6 +87,17 @@ exports.myApplications = async (req, res) => {
       console.log(err);
     }
   } else if (req.user.role === "admin") {
+    try {
+      const applications = await applicationModel.find().populate("listing").populate("tenant");
+
+      res.status(200).json({
+        status: "success",
+        message: "You've made it",
+        data: applications,
+      });
+    } catch (err) {
+      console.log(err);
+    }
   }
 };
 
@@ -125,57 +137,4 @@ exports.updateStatusApplication = async (req, res) => {
     status: "success",
     message: "The application has been updated",
   });
-};
-
-exports.myApplicationAsTenant = async (req, res) => {
-  const userId = req.user;
-  // console.log(req.user);
-  // console.log(req.user.role);
-  // const role = req.role;
-  try {
-    const applications = await applicationModel.aggregate([
-      {
-        $lookup: {
-          from: "listings",
-          localField: "listing",
-          foreignField: "_id",
-          as: "listing",
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "tenant",
-          foreignField: "_id",
-          as: "tenant",
-        },
-      },
-      {
-        $unwind: "$listing",
-      },
-      {
-        $unwind: "$tenant",
-      },
-      {
-        $match: {
-          "listing.landlord": new mongoose.Types.ObjectId(userId._id), // Convert the ID to ObjectId
-          // "listing.landlord": userId, // Convert the ID to ObjectId
-        },
-      },
-      {
-        $project: {
-          _id: 1,
-          tenant: 1,
-          listing: 1,
-        },
-      },
-    ]);
-    res.status(200).json({
-      status: "success",
-      message: "You've made it",
-      data: applications,
-    });
-  } catch (err) {
-    console.log(err);
-  }
 };
