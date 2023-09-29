@@ -5,11 +5,7 @@ const authController = require("../controllers/authController");
 const router = express.Router();
 
 router.post("/create/:id", authController.protect, applicationController.createApplication);
-router.get(
-  "/myapplications",
-  authController.protect,
-  applicationController.myApplicationAsLandlord
-);
+router.get("/myapplications", authController.protect, applicationController.myApplications);
 router.delete("/delete/:id", authController.protect, applicationController.deleteApplication);
 router.patch(
   "/updatestatus/:id",
