@@ -7,6 +7,7 @@ const MainNavBar = (props) => {
   const logoutHandler = () => {
     props.removeCookie("Rent@SG Cookie");
     props.setDisplayListings("verified");
+    props.setUserId(null);
     props.logoutHandler();
   };
   //className="bg-body-tertiary"
@@ -47,7 +48,14 @@ const MainNavBar = (props) => {
                 Register
               </Nav.Link>
             ) : null}
-            {props.isLoggedIn ? <Nav.Link className="fs-5">Applications</Nav.Link> : null}
+            {props.isLoggedIn ? (
+              <Nav.Link
+                className="fs-5"
+                onClick={() => props.setDisplayListings("my applications")}
+              >
+                Applications
+              </Nav.Link>
+            ) : null}
             {props.isLoggedIn && props.role !== "admin" ? (
               <Nav.Link
                 className="fs-5"

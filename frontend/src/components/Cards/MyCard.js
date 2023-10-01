@@ -8,7 +8,7 @@ const MyCard = (props) => {
 
   const buttonHandler = (event) => {
     event.stopPropagation();
-    console.log("hello");
+    props.showRentModalHandler();
   };
 
   const cardClickHandler = () => {

@@ -16,6 +16,8 @@ import EditListingModal from "./components/Modals/EditListingModal";
 import Chatbox from "./components/Chatbox/Chatbox";
 import SingleListingPage from "./components/Pages/SingleListingPage";
 import ProfileModal from "./components/Modals/ProfileModal";
+import ApplicationsPage from "./components/Pages/ApplicationsPage";
+import RentModal from "./components/Modals/RentModal";
 
 function App() {
   const [backendData, setBackendData] = useState("");
@@ -28,12 +30,14 @@ function App() {
   const [showListingModal, setShowListingModal] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showRentModal, setShowRentModal] = useState(false);
   const [displayListings, setDisplayListings] = useState("verified");
   const [currentListingId, setCurrentListingId] = useState(null);
   const [currentListingData, setCurrentListingData] = useState({});
   const [loadingData, setLoadingData] = useState(true);
   const [showEditListingModal, setShowEditListingModal] = useState(false);
   const [selectedListingPDFUrl, setSelectedListingPDFUrl] = useState("");
+  const [applicationsData, setApplicationsData] = useState("");
 
   // Login state
   const [loggedIn, setLoggedIn] = useState(false);
@@ -55,6 +59,14 @@ function App() {
   };
   const closeLoginModalHandler = () => {
     setShowLogin(false);
+  };
+
+  const showRentModalHandler = () => {
+    setShowRentModal(true);
+  };
+
+  const closeRentModalHandler = () => {
+    setShowRentModal(false);
   };
 
   const showProfileModalHandler = () => {
@@ -224,6 +236,22 @@ function App() {
       });
   }, []);
 
+  // get all related applications from the server
+  useEffect(() => {
+    if (userId) {
+      fetch("/applications/myapplications", {
+        headers: {
+          authorization: `Bearer ${cookies["Rent@SG Cookie"]}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data.data);
+          setApplicationsData(data.data);
+        });
+    }
+  }, [cookies, userId]);
+
   // get all the unverified listings on the server
   useEffect(() => {
     if (userId) {
@@ -317,6 +345,7 @@ function App() {
         setDisplayListings={setDisplayListings}
         showProfileModalHandler={showProfileModalHandler}
         role={role}
+        setUserId={setUserId}
       ></MainNavBar>
 
       <ListingModal
@@ -348,6 +377,11 @@ function App() {
         setUserId={setUserId}
         setCookie={setCookie}
       ></RegisterModal>
+
+      <RentModal
+        showRentModal={showRentModal}
+        closeRentModalHandler={closeRentModalHandler}
+      ></RentModal>
 
       {show && (
         <MyModal
@@ -403,6 +437,7 @@ function App() {
                   setCurrentListingId={setCurrentListingId}
                   currentListingId={currentListingId}
                   setLoadingData={setLoadingData}
+                  showRentModalHandler={showRentModalHandler}
                 />
               </Col>
             ))}
@@ -473,6 +508,10 @@ function App() {
             </>
           )}
         </Row>
+
+        {displayListings === "my applications" ? (
+          <ApplicationsPage applicationsData={applicationsData}></ApplicationsPage>
+        ) : null}
       </Container>
     </div>
   );
