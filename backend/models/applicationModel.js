@@ -20,6 +20,10 @@ const applicationSchema = new mongoose.Schema(
       type: String,
       default: "Pending Tenant's Agreement",
     },
+    adminAcknowledged: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true, // This option adds createdAt and updatedAt fields

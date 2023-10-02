@@ -7,6 +7,11 @@ const ApplicationsPage = (props) => {
     props.showApplicationModalHandler();
   };
 
+  const displayListingHandler = (listingId) => {
+    props.setCurrentListingId(`${listingId}`);
+    props.setDisplayListings("single listing");
+  };
+
   const adminUpdateApplicationHandler = (action, applicationListingId) => {
     props.setApplicationListingId(applicationListingId);
 
@@ -52,8 +57,8 @@ const ApplicationsPage = (props) => {
         color: "#dee2e6",
       }}
     >
-      <Table striped className="text-center mb-0">
-        <thead>
+      <Table striped className="text-center mb-0" style={{ verticalAlign: "middle" }}>
+        <thead style={{ verticalAlign: "middle" }}>
           <tr>
             <th>Listing Name</th>
             <th>Landlord Name</th>
@@ -76,14 +81,16 @@ const ApplicationsPage = (props) => {
             props.applicationsData.map((ele, ind) => {
               return (
                 <tr key={ind}>
-                  <th>{ele.listing.title}</th>
-                  <th>{ele.landlord.fullName}</th>
-                  <th>{ele.tenant.fullName}</th>
-                  <th>{ele.application.tenantAgreement ? "Submitted" : "Not submitted"}</th>
-                  <th>{ele.application.landLordAgreement ? "Submitted" : "Not submitted"}</th>
-                  <th>{ele.application.adminApproval ? "Acknowledged" : "Not Acknowledged"}</th>
-                  <th>{ele.application.status}</th>
-                  <th>
+                  <td onClick={() => displayListingHandler(ele.listing._id)}>
+                    {ele.listing.title}
+                  </td>
+                  <td>{ele.landlord.fullName}</td>
+                  <td>{ele.tenant.fullName}</td>
+                  <td>{ele.application.tenantAgreement ? "✅" : "❌"}</td>
+                  <td>{ele.application.landLordAgreement ? "✅" : "❌"}</td>
+                  <td>{ele.application.adminApproval ? "✅" : "❌"}</td>
+                  <td>{ele.application.status}</td>
+                  <td>
                     {props.role === "admin" ? (
                       <div>
                         <Button
@@ -98,6 +105,11 @@ const ApplicationsPage = (props) => {
                           Reject
                         </Button>
                       </div>
+                    ) : props.role === "user" &&
+                      ele.application.tenantAgreement &&
+                      ele.application.landLordAgreement &&
+                      ele.application.adminApproval ? (
+                      <Button className="mx-auto w-100">Deposit 💰</Button>
                     ) : (
                       <Button
                         disabled={
@@ -110,7 +122,7 @@ const ApplicationsPage = (props) => {
                         Submit Agreement
                       </Button>
                     )}
-                  </th>
+                  </td>
                 </tr>
               );
             })

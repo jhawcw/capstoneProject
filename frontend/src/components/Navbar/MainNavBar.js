@@ -2,6 +2,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { AlignCenter, User, LogOut, FileText } from "react-feather";
 
 const MainNavBar = (props) => {
   const logoutHandler = () => {
@@ -53,10 +54,11 @@ const MainNavBar = (props) => {
                 className="fs-5"
                 onClick={() => props.setDisplayListings("my applications")}
               >
-                Applications
+                <FileText size={18} className="mb-1 me-1" />
+                <span>Applications</span>
               </Nav.Link>
             ) : null}
-            {props.isLoggedIn && props.role !== "admin" ? (
+            {props.isLoggedIn && props.role === "admin" ? (
               <Nav.Link
                 className="fs-5"
                 onClick={() => props.setDisplayListings("verify listings")}
@@ -64,24 +66,26 @@ const MainNavBar = (props) => {
                 Verify Listings
               </Nav.Link>
             ) : null}
-            {props.isLoggedIn && props.role !== "user" ? (
+            {props.isLoggedIn && props.role === "landlord" ? (
               <Nav.Link className="fs-5" onClick={() => props.setDisplayListings("my listings")}>
                 My Listings
               </Nav.Link>
             ) : null}
-            {props.isLoggedIn && props.role !== "user" ? (
+            {props.isLoggedIn && props.role === "landlord" ? (
               <Nav.Link className="fs-5" onClick={props.showListingModalHandler}>
                 Create Listing
               </Nav.Link>
             ) : null}
             {props.isLoggedIn ? (
               <Nav.Link className="fs-5" onClick={props.showProfileModalHandler}>
-                Profile
+                <User size={18} className="mb-1 me-1" />
+                <span>Profile</span>
               </Nav.Link>
             ) : null}
             {props.isLoggedIn ? (
               <Nav.Link className="fs-5" onClick={logoutHandler}>
-                Log out
+                <LogOut size={18} className="mb-1 me-1" />
+                <span>Log out</span>
               </Nav.Link>
             ) : null}
           </Nav>

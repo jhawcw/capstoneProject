@@ -294,11 +294,13 @@ exports.updateStatusApplication = async (req, res) => {
     if (req.body.decision === "approve") {
       const query = await applicationModel.findByIdAndUpdate(applicationId, {
         adminApproval: true,
+        adminAcknowledged: true,
         status: "Approved, awaiting deposit",
       });
     } else if (req.body.decision === "reject") {
       const query = await applicationModel.findByIdAndUpdate(applicationId, {
         adminApproval: false,
+        adminAcknowledged: true,
         status: "Rejected, apply again",
       });
     }

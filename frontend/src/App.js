@@ -542,6 +542,8 @@ function App() {
             applicationListingId={applicationListingId}
             role={role}
             cookies={cookies}
+            setDisplayListings={setDisplayListings}
+            setCurrentListingId={setCurrentListingId}
           ></ApplicationsPage>
         ) : null}
       </Container>
