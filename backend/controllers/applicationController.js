@@ -66,6 +66,9 @@ exports.myApplications = async (req, res) => {
           $unwind: "$listing",
         },
         {
+          $unwind: "$listing.landlord",
+        },
+        {
           $unwind: "$tenant",
         },
         {
@@ -75,10 +78,32 @@ exports.myApplications = async (req, res) => {
           },
         },
         {
+          $group: {
+            _id: "$_id", // Group by the original _id field
+            tenant: { $first: "$tenant" },
+            listing: { $first: "$listing" },
+            landlordId: { $first: "$listing.landlord" }, // Include the unwound landlord field
+            application: { $first: "$$ROOT" }, // use $push if 1 application is related to multiple other models
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "landlordId",
+            foreignField: "_id",
+            as: "landlord",
+          },
+        },
+        {
+          $unwind: "$landlord",
+        },
+        {
           $project: {
             _id: 1,
             tenant: 1,
             listing: 1,
+            landlord: 1,
+            application: 1,
           },
         },
       ]);
@@ -171,7 +196,62 @@ exports.myApplications = async (req, res) => {
     }
   } else if (req.user.role === "admin") {
     try {
-      const applications = await applicationModel.find().populate("listing").populate("tenant");
+      const applications = await applicationModel.aggregate([
+        {
+          $lookup: {
+            from: "listings",
+            localField: "listing",
+            foreignField: "_id",
+            as: "listing",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "tenant",
+            foreignField: "_id",
+            as: "tenant",
+          },
+        },
+        {
+          $unwind: "$listing",
+        },
+        {
+          $unwind: "$listing.landlord",
+        },
+        {
+          $unwind: "$tenant",
+        },
+        {
+          $group: {
+            _id: "$_id", // Group by the original _id field
+            tenant: { $first: "$tenant" },
+            listing: { $first: "$listing" },
+            landlordId: { $first: "$listing.landlord" }, // Include the unwound landlord field
+            application: { $first: "$$ROOT" }, // use $push if 1 application is related to multiple other models
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "landlordId",
+            foreignField: "_id",
+            as: "landlord",
+          },
+        },
+        {
+          $unwind: "$landlord",
+        },
+        {
+          $project: {
+            _id: 1,
+            tenant: 1,
+            listing: 1,
+            landlord: 1,
+            application: 1,
+          },
+        },
+      ]);
 
       res.status(200).json({
         status: "success",
@@ -210,10 +290,18 @@ exports.updateStatusApplication = async (req, res) => {
       status: "Pending Admin's Approval",
     });
   } else if (role === "admin") {
-    const query = await applicationModel.findByIdAndUpdate(applicationId, {
-      tenantAgreement: true,
-      status: "Approved, awaiting deposit",
-    });
+    console.log(req.body.decision);
+    if (req.body.decision === "approve") {
+      const query = await applicationModel.findByIdAndUpdate(applicationId, {
+        adminApproval: true,
+        status: "Approved, awaiting deposit",
+      });
+    } else if (req.body.decision === "reject") {
+      const query = await applicationModel.findByIdAndUpdate(applicationId, {
+        adminApproval: false,
+        status: "Rejected, apply again",
+      });
+    }
   }
 
   res.status(200).json({

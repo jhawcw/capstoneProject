@@ -31,6 +31,18 @@ const UpdateApplicationForm = (props) => {
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
+          if (data.status === "success") {
+            fetch("/applications/myapplications", {
+              headers: {
+                authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
+              },
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data.data);
+                props.setApplicationsData(data.data);
+              });
+          }
         });
     } catch (err) {
       console.log(err);

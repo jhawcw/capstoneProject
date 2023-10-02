@@ -7,6 +7,41 @@ const ApplicationsPage = (props) => {
     props.showApplicationModalHandler();
   };
 
+  const adminUpdateApplicationHandler = (action, applicationListingId) => {
+    props.setApplicationListingId(applicationListingId);
+
+    if (action) {
+      fetch(`/applications/updatestatus/${props.applicationListingId}`, {
+        method: "PATCH",
+        headers: {
+          authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          decision: "approve",
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        });
+    } else {
+      fetch(`/applications/updatestatus/${props.applicationListingId}`, {
+        method: "PATCH",
+        headers: {
+          authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          decision: "reject",
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        });
+    }
+  };
   return (
     <div
       style={{
@@ -46,15 +81,35 @@ const ApplicationsPage = (props) => {
                   <th>{ele.tenant.fullName}</th>
                   <th>{ele.application.tenantAgreement ? "Submitted" : "Not submitted"}</th>
                   <th>{ele.application.landLordAgreement ? "Submitted" : "Not submitted"}</th>
-                  <th>{ele.application.adminApproval ? "Approved" : "-"}</th>
+                  <th>{ele.application.adminApproval ? "Acknowledged" : "Not Acknowledged"}</th>
                   <th>{ele.application.status}</th>
                   <th>
-                    <Button
-                      disabled={ele.application.tenantAgreement}
-                      onClick={() => updateApplicationHandler(ele.application._id)}
-                    >
-                      Submit Agreement
-                    </Button>
+                    {props.role === "admin" ? (
+                      <div>
+                        <Button
+                          className="mb-2"
+                          onClick={() => adminUpdateApplicationHandler(true, ele.application._id)}
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          onClick={() => adminUpdateApplicationHandler(false, ele.application._id)}
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button
+                        disabled={
+                          props.role === "user"
+                            ? ele.application.tenantAgreement
+                            : ele.application.landLordAgreement
+                        }
+                        onClick={() => updateApplicationHandler(ele.application._id)}
+                      >
+                        Submit Agreement
+                      </Button>
+                    )}
                   </th>
                 </tr>
               );

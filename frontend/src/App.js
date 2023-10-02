@@ -377,6 +377,7 @@ function App() {
         setApplicationListingId={setApplicationListingId}
         closeApplicationModalHandler={closeApplicationModalHandler}
         cookies={cookies}
+        setApplicationsData={setApplicationsData}
       ></UpdateApplicationModal>
 
       <LoginModal
@@ -538,6 +539,9 @@ function App() {
             applicationsData={applicationsData}
             showApplicationModalHandler={showApplicationModalHandler}
             setApplicationListingId={setApplicationListingId}
+            applicationListingId={applicationListingId}
+            role={role}
+            cookies={cookies}
           ></ApplicationsPage>
         ) : null}
       </Container>

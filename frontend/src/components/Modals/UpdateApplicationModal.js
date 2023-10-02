@@ -21,6 +21,7 @@ const UpdateApplicationModal = (props) => {
             setApplicationListingId={props.setApplicationListingId}
             closeApplicationModalHandler={props.closeApplicationModalHandler}
             cookies={props.cookies}
+            setApplicationsData={props.setApplicationsData}
           ></UpdateApplicationForm>
           {/* <CreateListingForm
             closeListingModalHandler={props.closeListingModalHandler}
