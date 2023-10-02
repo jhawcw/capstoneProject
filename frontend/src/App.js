@@ -18,6 +18,7 @@ import SingleListingPage from "./components/Pages/SingleListingPage";
 import ProfileModal from "./components/Modals/ProfileModal";
 import ApplicationsPage from "./components/Pages/ApplicationsPage";
 import RentModal from "./components/Modals/RentModal";
+import UpdateApplicationModal from "./components/Modals/UpdateApplicationModal";
 
 function App() {
   const [backendData, setBackendData] = useState("");
@@ -30,6 +31,7 @@ function App() {
   const [showListingModal, setShowListingModal] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [showRentModal, setShowRentModal] = useState(false);
   const [displayListings, setDisplayListings] = useState("verified");
   const [currentListingId, setCurrentListingId] = useState(null);
@@ -38,6 +40,7 @@ function App() {
   const [showEditListingModal, setShowEditListingModal] = useState(false);
   const [selectedListingPDFUrl, setSelectedListingPDFUrl] = useState("");
   const [applicationsData, setApplicationsData] = useState("");
+  const [applicationListingId, setApplicationListingId] = useState(null);
 
   // Login state
   const [loggedIn, setLoggedIn] = useState(false);
@@ -114,6 +117,14 @@ function App() {
 
   const closeVerifyModalHandler = (listingId) => {
     setShowVerifyModal(false);
+  };
+
+  const closeApplicationModalHandler = () => {
+    setShowApplicationModal(false);
+  };
+
+  const showApplicationModalHandler = () => {
+    setShowApplicationModal(true);
   };
 
   //Listing Modal state
@@ -359,6 +370,15 @@ function App() {
         setUserListingData={setUserListingData}
       ></ListingModal>
 
+      <UpdateApplicationModal
+        showApplicationModal={showApplicationModal}
+        setShowApplicationModal={setShowApplicationModal}
+        applicationListingId={applicationListingId}
+        setApplicationListingId={setApplicationListingId}
+        closeApplicationModalHandler={closeApplicationModalHandler}
+        cookies={cookies}
+      ></UpdateApplicationModal>
+
       <LoginModal
         showLogin={showLogin}
         setShowLogin={setShowLogin}
@@ -381,6 +401,9 @@ function App() {
       <RentModal
         showRentModal={showRentModal}
         closeRentModalHandler={closeRentModalHandler}
+        cookies={cookies}
+        applicationListingId={applicationListingId}
+        setApplicationsData={setApplicationsData}
       ></RentModal>
 
       {show && (
@@ -438,6 +461,7 @@ function App() {
                   currentListingId={currentListingId}
                   setLoadingData={setLoadingData}
                   showRentModalHandler={showRentModalHandler}
+                  setApplicationListingId={setApplicationListingId}
                 />
               </Col>
             ))}
@@ -510,7 +534,11 @@ function App() {
         </Row>
 
         {displayListings === "my applications" ? (
-          <ApplicationsPage applicationsData={applicationsData}></ApplicationsPage>
+          <ApplicationsPage
+            applicationsData={applicationsData}
+            showApplicationModalHandler={showApplicationModalHandler}
+            setApplicationListingId={setApplicationListingId}
+          ></ApplicationsPage>
         ) : null}
       </Container>
     </div>

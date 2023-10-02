@@ -10,6 +10,7 @@ router.delete("/delete/:id", authController.protect, applicationController.delet
 router.patch(
   "/updatestatus/:id",
   authController.protect,
+  applicationController.uploadAgreement,
   applicationController.updateStatusApplication
 );
 

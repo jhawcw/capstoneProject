@@ -8,6 +8,7 @@ const MyCard = (props) => {
 
   const buttonHandler = (event) => {
     event.stopPropagation();
+    props.setApplicationListingId(props.listingData._id);
     props.showRentModalHandler();
   };
 

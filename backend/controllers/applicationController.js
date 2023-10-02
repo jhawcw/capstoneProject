@@ -1,7 +1,26 @@
 const mongoose = require("mongoose");
+const path = require("path");
+const fs = require("fs");
+const multer = require("multer");
 const applicationModel = require("../models/applicationModel");
 const listingModel = require("../models/listingModel");
 const AppError = require("../utils/appError");
+
+// Multer configuration to storing of agreements
+const multerAgreementStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/agreements");
+  },
+  filename: (req, file, cb) => {
+    cb(null, `user-${req.user.id}-${Date.now()}-${Math.floor(Math.random() * 10000)}.pdf`);
+  },
+});
+
+const uploadAgreement = multer({
+  storage: multerAgreementStorage,
+});
+
+exports.uploadAgreement = uploadAgreement.single("agreement");
 
 exports.createApplication = (req, res) => {
   const listingId = req.params.id;
