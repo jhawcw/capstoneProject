@@ -1,4 +1,4 @@
-import { CardElement, useStripe, useElements, Elements } from "@stripe/react-stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/esm/Button";
@@ -82,7 +82,7 @@ const ApplicationsPage = (props) => {
     // }
 
     try {
-      const response = await fetch(`/rentings/checkout-session/${listingId}`, {
+      await fetch(`/rentings/checkout-session/${listingId}`, {
         headers: {
           authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
         },
