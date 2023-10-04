@@ -184,7 +184,7 @@ exports.myApplications = async (req, res) => {
           },
         },
       ]);
-      console.log(applications);
+      // console.log(applications);
 
       res.status(200).json({
         status: "success",

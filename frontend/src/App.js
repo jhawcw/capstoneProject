@@ -19,6 +19,7 @@ import ProfileModal from "./components/Modals/ProfileModal";
 import ApplicationsPage from "./components/Pages/ApplicationsPage";
 import RentModal from "./components/Modals/RentModal";
 import UpdateApplicationModal from "./components/Modals/UpdateApplicationModal";
+import PaymentModal from "./components/Modals/paymentModal";
 
 function App() {
   const [backendData, setBackendData] = useState("");
@@ -33,6 +34,7 @@ function App() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [showRentModal, setShowRentModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [displayListings, setDisplayListings] = useState("verified");
   const [currentListingId, setCurrentListingId] = useState(null);
   const [currentListingData, setCurrentListingData] = useState({});
@@ -102,6 +104,13 @@ function App() {
     setShowEditListingModal(false);
   };
 
+  // Register Modal state
+  const showPaymentModalHandler = () => {
+    setShowPaymentModal(true);
+  };
+  const closePaymentModalHandler = () => {
+    setShowPaymentModal(false);
+  };
   // Register Modal state
   const showRegisterModalHandler = () => {
     setShowRegister(true);
@@ -359,6 +368,11 @@ function App() {
         setUserId={setUserId}
       ></MainNavBar>
 
+      <PaymentModal
+        setShowPaymentModal={setShowPaymentModal}
+        showPaymentModal={showPaymentModal}
+      ></PaymentModal>
+
       <ListingModal
         showListingModal={showListingModal}
         setShowListingModal={setShowListingModal}
@@ -544,6 +558,7 @@ function App() {
             cookies={cookies}
             setDisplayListings={setDisplayListings}
             setCurrentListingId={setCurrentListingId}
+            showPaymentModalHandler={showPaymentModalHandler}
           ></ApplicationsPage>
         ) : null}
       </Container>
