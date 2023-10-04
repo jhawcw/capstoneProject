@@ -14,6 +14,7 @@ const userRoutes = require("./routes/userRoutes");
 const listingRoutes = require("./routes/listingRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const applicationRoutes = require("./routes/applicationRoutes");
+const rentingRoutes = require("./routes/rentingRoutes");
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
 
@@ -53,6 +54,7 @@ app.use("/users", userRoutes);
 app.use("/listings", listingRoutes);
 app.use("/comments", commentRoutes);
 app.use("/applications", applicationRoutes);
+app.use("/rentings", rentingRoutes);
 
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/public/index.html");
