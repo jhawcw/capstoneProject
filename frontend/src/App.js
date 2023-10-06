@@ -26,7 +26,6 @@ function App() {
   const [listingData, setListingData] = useState([]);
   const [userListingData, setUserListingData] = useState([]);
   const [unverifiedListingData, setUnverifiedListingData] = useState([]);
-  const [show, setShow] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showListingModal, setShowListingModal] = useState(false);
