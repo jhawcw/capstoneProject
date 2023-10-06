@@ -56,9 +56,6 @@ function App() {
   const loginHandler = () => setLoggedIn(true);
   const logoutHandler = () => setLoggedIn(false);
 
-  const closeHandler = () => setShow(false);
-  const showHandler = () => setShow(true);
-
   const showLoginModalHandler = () => {
     setShowLogin(true);
   };
@@ -420,15 +417,6 @@ function App() {
         applicationListingId={applicationListingId}
         setApplicationsData={setApplicationsData}
       ></RentModal>
-
-      {show && (
-        <MyModal
-          closeHandler={closeHandler}
-          show={show}
-          title={"Login/Register"}
-          content={<RegisterForm envData={backendData} />}
-        ></MyModal>
-      )}
 
       <VerifyModal
         showVerifyModal={showVerifyModal}

@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { AlignCenter, User, LogOut, FileText } from "react-feather";
+import { User, LogOut, FileText } from "react-feather";
 
 const MainNavBar = (props) => {
   const logoutHandler = () => {
