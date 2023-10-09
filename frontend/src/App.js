@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import "./App.css";
-import MyModal from "./components/Modals/Modal";
-import RegisterForm from "./components/Forms/RegisterForm";
 import MyCard from "./components/Cards/MyCard";
 import LoginModal from "./components/Modals/LoginModal";
 import MainNavBar from "./components/Navbar/MainNavBar";
