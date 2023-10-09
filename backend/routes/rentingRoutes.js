@@ -9,6 +9,8 @@ router.get(
   rentingController.getCheckoutSession
 );
 
+router.get("/payment-success", rentingController.createRentingPeriod);
+
 // router.get("/smth", rentingController.test);
 
 module.exports = router;
