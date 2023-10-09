@@ -18,6 +18,7 @@ import ApplicationsPage from "./components/Pages/ApplicationsPage";
 import RentModal from "./components/Modals/RentModal";
 import UpdateApplicationModal from "./components/Modals/UpdateApplicationModal";
 import PaymentModal from "./components/Modals/paymentModal";
+import RentalsPage from "./components/Pages/RentalsPage";
 
 function App() {
   const [backendData, setBackendData] = useState("");
@@ -70,7 +71,6 @@ function App() {
 
   const showProfileModalHandler = () => {
     setShowProfileModal(true);
-    console.log(role);
   };
 
   const closeProfileModalHandler = () => {
@@ -446,7 +446,7 @@ function App() {
         sex={sex}
       ></ProfileModal>
 
-      <Container style={{ paddingTop: "10vh" }}>
+      <Container style={{ paddingTop: "10vh", minHeight: "100vh" }}>
         <Row>
           {displayListings === "verified" &&
             listingData
@@ -549,6 +549,8 @@ function App() {
             showPaymentModalHandler={showPaymentModalHandler}
           ></ApplicationsPage>
         ) : null}
+
+        {displayListings === "my rentals" ? <RentalsPage></RentalsPage> : null}
       </Container>
     </div>
   );
