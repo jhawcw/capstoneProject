@@ -253,7 +253,7 @@ function App() {
 
   // get all related applications from the server
   useEffect(() => {
-    if (userId) {
+    if (cookies) {
       fetch("/applications/myapplications", {
         headers: {
           authorization: `Bearer ${cookies["Rent@SG Cookie"]}`,
@@ -261,11 +261,10 @@ function App() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data.data);
           setApplicationsData(data.data);
         });
     }
-  }, [cookies, userId]);
+  }, [cookies]);
 
   // get all the unverified listings on the server
   useEffect(() => {
