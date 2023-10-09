@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 const userModel = require("../models/userModel");
 const AppError = require("../utils/appError");
+const catchAsync = require("../utils/catchAsync");
 
 exports.signup = async (req, res, next) => {
   const newUser = await User.create(req.body);
@@ -52,7 +53,7 @@ exports.login = async (req, res, next) => {
   });
 };
 
-exports.protect = async (req, res, next) => {
+exports.protect = catchAsync(async (req, res, next) => {
   let token;
   // 1) get the token from the client and check if it is present
   if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
@@ -62,7 +63,9 @@ exports.protect = async (req, res, next) => {
     return next(new AppError("You are not logged in! Please login to get access", 401));
   }
   // 2) validate the token using the JWT package
+  console.log("this is the point");
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  console.log("this is after the point");
   // 3) check if user still exist
   const freshUser = await userModel.findById(decoded.id);
   if (!freshUser) {
@@ -76,7 +79,7 @@ exports.protect = async (req, res, next) => {
   req.user = freshUser;
   res.locals.user = freshUser;
   next();
-};
+});
 
 exports.checkCookie = async (req, res) => {
   try {

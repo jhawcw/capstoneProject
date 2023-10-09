@@ -2,7 +2,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { User, LogOut, FileText, Home } from "react-feather";
+import { User, LogOut, FileText, Home, ThumbsUp } from "react-feather";
 
 const MainNavBar = (props) => {
   const logoutHandler = () => {
@@ -49,10 +49,10 @@ const MainNavBar = (props) => {
                 Register
               </Nav.Link>
             ) : null}
-            {props.isLoggedIn && props.role !== "admin" ? (
+            {props.isLoggedIn ? (
               <Nav.Link className="fs-5" onClick={() => props.setDisplayListings("my rentals")}>
                 <Home size={18} className="mb-1 me-1" />
-                <span>My Rentals</span>
+                <span>{props.role === "admin" ? "All" : "My"} Rentals</span>
               </Nav.Link>
             ) : null}
             {props.isLoggedIn ? (
@@ -69,7 +69,8 @@ const MainNavBar = (props) => {
                 className="fs-5"
                 onClick={() => props.setDisplayListings("verify listings")}
               >
-                Verify Listings
+                <ThumbsUp size={18} className="mb-1 me-1" />
+                <span>Verify Listings</span>
               </Nav.Link>
             ) : null}
             {props.isLoggedIn && props.role === "landlord" ? (
