@@ -2,6 +2,7 @@ const express = require("express");
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 const router = express.Router();
+// const listingModel = require("../models/listingModel");
 
 // Landlord register endpoint
 router.post(
@@ -25,4 +26,11 @@ router.get("/my-profile", userController.getProfile);
 
 // router.post("/testregister", userController.uploadUserPhoto, userController.pairTest);
 router.get("/check-cookie", authController.checkCookie);
+
+// router.get("/testing123", async function (req, res) {
+//   await listingModel.updateMany({}, { $set: { active: true } });
+//   res.status(200).json({
+//     message: "updated again1111",
+//   });
+// });
 module.exports = router;

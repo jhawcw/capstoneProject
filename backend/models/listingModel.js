@@ -42,6 +42,10 @@ const listingSchema = new mongoose.Schema({
     default: 0,
   },
   verifiedBy: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+  active: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 listingSchema.post("findOneAndUpdate", async (doc) => {

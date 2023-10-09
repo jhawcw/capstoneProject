@@ -247,6 +247,7 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         setListingData(data.data);
+        console.log(data.data);
       });
   }, []);
 
@@ -448,23 +449,25 @@ function App() {
       <Container style={{ paddingTop: "10vh" }}>
         <Row>
           {displayListings === "verified" &&
-            listingData.map((item, ind) => (
-              <Col md={3} style={{ height: "425px" }} key={ind} className="mb-4 mt-4">
-                <MyCard
-                  key={item._id}
-                  title={item.title}
-                  imageCover={item.imageCover}
-                  listingData={item}
-                  userId={userId}
-                  setDisplayListings={setDisplayListings}
-                  setCurrentListingId={setCurrentListingId}
-                  currentListingId={currentListingId}
-                  setLoadingData={setLoadingData}
-                  showRentModalHandler={showRentModalHandler}
-                  setApplicationListingId={setApplicationListingId}
-                />
-              </Col>
-            ))}
+            listingData
+              .filter((item) => item.active === true)
+              .map((item, ind) => (
+                <Col md={3} style={{ height: "425px" }} key={ind} className="mb-4 mt-4">
+                  <MyCard
+                    key={item._id}
+                    title={item.title}
+                    imageCover={item.imageCover}
+                    listingData={item}
+                    userId={userId}
+                    setDisplayListings={setDisplayListings}
+                    setCurrentListingId={setCurrentListingId}
+                    currentListingId={currentListingId}
+                    setLoadingData={setLoadingData}
+                    showRentModalHandler={showRentModalHandler}
+                    setApplicationListingId={setApplicationListingId}
+                  />
+                </Col>
+              ))}
           {displayListings === "my listings" &&
             userListingData.map((item, ind) => (
               <Col md={3} style={{ height: "425px" }} key={ind} className="mb-4  mt-4">

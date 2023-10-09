@@ -60,7 +60,11 @@ exports.createRentingPeriod = async (req, res, next) => {
     { listing: listing, tenant: tenant },
     { active: false }
   );
-  console.log(application);
+
+  const updatedListing = await listingModel.findOneAndUpdate({ _id: listing }, { active: false });
+
+  console.log(updatedListing, "this is updatedlisting");
+
   renting.save();
 
   res.redirect(302, "http://localhost:3000/?renting=success");
