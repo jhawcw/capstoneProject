@@ -136,61 +136,65 @@ const ApplicationsPage = (props) => {
                 </td>
               </tr>
             ) : (
-              props.applicationsData.map((ele, ind) => {
-                return (
-                  <tr key={ind}>
-                    <td onClick={() => displayListingHandler(ele.listing._id)}>
-                      {ele.listing.title}
-                    </td>
-                    <td>{ele.landlord.fullName}</td>
-                    <td>{ele.tenant.fullName}</td>
-                    <td>{ele.application.tenantAgreement ? "✅" : "❌"}</td>
-                    <td>{ele.application.landLordAgreement ? "✅" : "❌"}</td>
-                    <td>{ele.application.adminApproval ? "✅" : "❌"}</td>
-                    <td>{ele.application.status}</td>
-                    <td>
-                      {props.role === "admin" ? (
-                        <div>
+              props.applicationsData
+                .filter((ele) => ele.application.active === true)
+                .map((ele, ind) => {
+                  return (
+                    <tr key={ind}>
+                      <td onClick={() => displayListingHandler(ele.listing._id)}>
+                        {ele.listing.title}
+                      </td>
+                      <td>{ele.landlord.fullName}</td>
+                      <td>{ele.tenant.fullName}</td>
+                      <td>{ele.application.tenantAgreement ? "✅" : "❌"}</td>
+                      <td>{ele.application.landLordAgreement ? "✅" : "❌"}</td>
+                      <td>{ele.application.adminApproval ? "✅" : "❌"}</td>
+                      <td>{ele.application.status}</td>
+                      <td>
+                        {props.role === "admin" ? (
+                          <div>
+                            <Button
+                              className="mb-2"
+                              onClick={() =>
+                                adminUpdateApplicationHandler(true, ele.application._id)
+                              }
+                            >
+                              Approve
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                adminUpdateApplicationHandler(false, ele.application._id)
+                              }
+                            >
+                              Reject
+                            </Button>
+                          </div>
+                        ) : props.role === "user" &&
+                          ele.application.tenantAgreement &&
+                          ele.application.landLordAgreement &&
+                          ele.application.adminApproval ? (
                           <Button
-                            className="mb-2"
-                            onClick={() => adminUpdateApplicationHandler(true, ele.application._id)}
+                            className="mx-auto w-100"
+                            onClick={() => paymentHandler(ele.listing._id)}
                           >
-                            Approve
+                            Deposit 💰
                           </Button>
+                        ) : (
                           <Button
-                            onClick={() =>
-                              adminUpdateApplicationHandler(false, ele.application._id)
+                            disabled={
+                              props.role === "user"
+                                ? ele.application.tenantAgreement
+                                : ele.application.landLordAgreement
                             }
+                            onClick={() => updateApplicationHandler(ele.application._id)}
                           >
-                            Reject
+                            Submit Agreement
                           </Button>
-                        </div>
-                      ) : props.role === "user" &&
-                        ele.application.tenantAgreement &&
-                        ele.application.landLordAgreement &&
-                        ele.application.adminApproval ? (
-                        <Button
-                          className="mx-auto w-100"
-                          onClick={() => paymentHandler(ele.listing._id)}
-                        >
-                          Deposit 💰
-                        </Button>
-                      ) : (
-                        <Button
-                          disabled={
-                            props.role === "user"
-                              ? ele.application.tenantAgreement
-                              : ele.application.landLordAgreement
-                          }
-                          onClick={() => updateApplicationHandler(ele.application._id)}
-                        >
-                          Submit Agreement
-                        </Button>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
             )}
           </tbody>
         </Table>

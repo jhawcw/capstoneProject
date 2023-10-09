@@ -46,31 +46,22 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createRentingPeriod = (req, res, next) => {
+exports.createRentingPeriod = async (req, res, next) => {
   const { listing, landlord, tenant } = req.query;
-
-  // Set the startDate to the current date
-  // const startDate = new Date();
-
-  // Set the endDate to 1 year later
-  // const endDate = new Date();
-  // endDate.setFullYear(endDate.getFullYear() + 1);
-  console.log(listing, "this is listing");
-  console.log(landlord, "this is landlord");
-  console.log(tenant, "this is tenant");
 
   const renting = new rentingModel({
     listing: listing,
     tenant: tenant,
     landLord: landlord,
     tenancyAgreement: "",
-    // startDate: startDate,
-    // endDate: endDate,
   });
+
+  const application = await applicationModel.findOneAndUpdate(
+    { listing: listing, tenant: tenant },
+    { active: false }
+  );
+  console.log(application);
   renting.save();
 
-  res.status(200).json({
-    message: "Congratulation you may collect the keys and occupy the rental room/unit",
-    status: "success",
-  });
+  res.redirect(302, "http://localhost:3000/?renting=success");
 };

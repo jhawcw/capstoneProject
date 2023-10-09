@@ -24,6 +24,10 @@ const applicationSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    active: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true, // This option adds createdAt and updatedAt fields
