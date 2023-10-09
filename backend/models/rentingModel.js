@@ -27,6 +27,10 @@ const rentingSchema = new mongoose.Schema(
   }
 );
 
+rentingSchema.pre(/^find/, function (next) {
+  this.populate("tenant").populate("listing").populate("landLord");
+});
+
 const Renting = mongoose.model("Renting", rentingSchema);
 
 module.exports = Renting;
