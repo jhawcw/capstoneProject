@@ -3,7 +3,8 @@ const MyButton = (props) => {
     <button
       type="button"
       className={props.cssClass}
-      onClick={() => {
+      onClick={(event) => {
+        event.stopPropagation();
         props.clickHandler(props.listingId);
       }}
     >

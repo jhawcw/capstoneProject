@@ -19,6 +19,7 @@ const MainNavBar = (props) => {
     props.removeCookie("Rent@SG Cookie");
     props.setDisplayListings("verified");
     props.setUserId(null);
+    props.setCurrentListingId(null);
     props.logoutHandler();
   };
   //className="bg-body-tertiary"
@@ -49,27 +50,30 @@ const MainNavBar = (props) => {
           </Nav>
           <Nav className="ms-auto">
             {!props.isLoggedIn ? (
-              <Nav.Link className="fs-5" onClick={props.showLoginModalHandler}>
+              <Nav.Link className="fs-5  ps-4" onClick={props.showLoginModalHandler}>
                 <LogIn size={18} className="mb-1 me-1" />
                 <span>Login</span>
               </Nav.Link>
             ) : null}
 
             {!props.isLoggedIn ? (
-              <Nav.Link className="fs-5" onClick={props.showRegisterModalHandler}>
+              <Nav.Link className="fs-5  ps-4" onClick={props.showRegisterModalHandler}>
                 <UserPlus size={18} className="mb-1 me-1" />
                 <span>Register</span>
               </Nav.Link>
             ) : null}
             {props.isLoggedIn ? (
-              <Nav.Link className="fs-5" onClick={() => props.setDisplayListings("my rentals")}>
+              <Nav.Link
+                className="fs-5  ps-4"
+                onClick={() => props.setDisplayListings("my rentals")}
+              >
                 <Home size={18} className="mb-1 me-1" />
                 <span>{props.role === "admin" ? "All" : "My"} Rentals</span>
               </Nav.Link>
             ) : null}
             {props.isLoggedIn ? (
               <Nav.Link
-                className="fs-5"
+                className="fs-5 ps-4"
                 onClick={() => props.setDisplayListings("my applications")}
               >
                 <FileText size={18} className="mb-1 me-1" />
@@ -78,7 +82,7 @@ const MainNavBar = (props) => {
             ) : null}
             {props.isLoggedIn && props.role === "admin" ? (
               <Nav.Link
-                className="fs-5"
+                className="fs-5  ps-4"
                 onClick={() => props.setDisplayListings("verify listings")}
               >
                 <ThumbsUp size={18} className="mb-1 me-1" />
@@ -86,25 +90,28 @@ const MainNavBar = (props) => {
               </Nav.Link>
             ) : null}
             {props.isLoggedIn && props.role === "landlord" ? (
-              <Nav.Link className="fs-5" onClick={() => props.setDisplayListings("my listings")}>
+              <Nav.Link
+                className="fs-5  ps-4"
+                onClick={() => props.setDisplayListings("my listings")}
+              >
                 <Archive size={18} className="mb-1 me-1" />
                 <span>My Listings</span>
               </Nav.Link>
             ) : null}
             {props.isLoggedIn && props.role === "landlord" ? (
-              <Nav.Link className="fs-5" onClick={props.showListingModalHandler}>
+              <Nav.Link className="fs-5  ps-4" onClick={props.showListingModalHandler}>
                 <FilePlus size={18} className="mb-1 me-1" />
                 <span>Create Listing</span>
               </Nav.Link>
             ) : null}
             {props.isLoggedIn ? (
-              <Nav.Link className="fs-5" onClick={props.showProfileModalHandler}>
+              <Nav.Link className="fs-5  ps-4" onClick={props.showProfileModalHandler}>
                 <User size={18} className="mb-1 me-1" />
                 <span>Profile</span>
               </Nav.Link>
             ) : null}
             {props.isLoggedIn ? (
-              <Nav.Link className="fs-5" onClick={logoutHandler}>
+              <Nav.Link className="fs-5  ps-4" onClick={logoutHandler}>
                 <LogOut size={18} className="mb-1 me-1" />
                 <span>Log out</span>
               </Nav.Link>

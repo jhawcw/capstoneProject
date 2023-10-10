@@ -46,16 +46,14 @@ const MyCard = (props) => {
           <Card.Text>{props.content}</Card.Text>
         </Card.Body>
         <Card.Footer style={{ backgroundColor: "#ffd4cf", height: "13%" }}>
-          {props.listingData && props.userId !== props.listingData.landlord[0] && (
-            // <MyButton
-            //   displayText="Rent"
-            //   cssClass="me-3 btn btn-secondary"
-            //   clickHandler={() => console.log("hello")}
-            // />
-            <Button className="me-3 btn btn-secondary" onClick={buttonHandler}>
-              Rent
-            </Button>
-          )}
+          {props.listingData &&
+            props.userId !== props.listingData.landlord[0] &&
+            props.userId &&
+            props.role !== "admin" && (
+              <Button className="me-3 btn btn-secondary" onClick={buttonHandler}>
+                Rent
+              </Button>
+            )}
 
           {props.listingData &&
             !props.listingData.verified &&

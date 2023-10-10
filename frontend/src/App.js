@@ -323,7 +323,7 @@ function App() {
   }, [userId]);
 
   useEffect(() => {
-    if (currentListingId) {
+    if (currentListingId && displayListings === "single listing") {
       fetch(`http://localhost:3001/listings/myagreement/${currentListingId}`, {
         method: "GET",
       })
@@ -342,7 +342,7 @@ function App() {
           setSelectedListingPDFUrl("");
         });
     }
-  }, [currentListingId]);
+  }, [currentListingId, displayListings]);
 
   // get the listing data of the current listing that is currently selected
   // useEffect(() => {
@@ -373,6 +373,7 @@ function App() {
         showProfileModalHandler={showProfileModalHandler}
         role={role}
         setUserId={setUserId}
+        setCurrentListingId={setCurrentListingId}
       ></MainNavBar>
 
       <PaymentModal
@@ -477,6 +478,7 @@ function App() {
                     setLoadingData={setLoadingData}
                     showRentModalHandler={showRentModalHandler}
                     setApplicationListingId={setApplicationListingId}
+                    role={role}
                   />
                 </Col>
               ))}
@@ -511,6 +513,7 @@ function App() {
                   setCurrentListingId={setCurrentListingId}
                   currentListingId={currentListingId}
                   setLoadingData={setLoadingData}
+                  role={role}
                 />
               </Col>
             ))}
@@ -571,11 +574,3 @@ function App() {
 }
 
 export default App;
-
-/*{/* {typeof listingData === "undefined" ? (
-  <p>No listings found</p>
-  ) : (
-    listingData.map((ele, ind, arr) => {
-      return <MyCard key={ind} title={ele.title} />;
-    })
-  )} }*/
