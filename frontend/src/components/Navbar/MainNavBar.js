@@ -2,7 +2,17 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { User, LogOut, FileText, Home, ThumbsUp } from "react-feather";
+import {
+  User,
+  LogOut,
+  FileText,
+  Home,
+  ThumbsUp,
+  LogIn,
+  Archive,
+  UserPlus,
+  FilePlus,
+} from "react-feather";
 
 const MainNavBar = (props) => {
   const logoutHandler = () => {
@@ -40,13 +50,15 @@ const MainNavBar = (props) => {
           <Nav className="ms-auto">
             {!props.isLoggedIn ? (
               <Nav.Link className="fs-5" onClick={props.showLoginModalHandler}>
-                Login
+                <LogIn size={18} className="mb-1 me-1" />
+                <span>Login</span>
               </Nav.Link>
             ) : null}
 
             {!props.isLoggedIn ? (
               <Nav.Link className="fs-5" onClick={props.showRegisterModalHandler}>
-                Register
+                <UserPlus size={18} className="mb-1 me-1" />
+                <span>Register</span>
               </Nav.Link>
             ) : null}
             {props.isLoggedIn ? (
@@ -75,12 +87,14 @@ const MainNavBar = (props) => {
             ) : null}
             {props.isLoggedIn && props.role === "landlord" ? (
               <Nav.Link className="fs-5" onClick={() => props.setDisplayListings("my listings")}>
-                My Listings
+                <Archive size={18} className="mb-1 me-1" />
+                <span>My Listings</span>
               </Nav.Link>
             ) : null}
             {props.isLoggedIn && props.role === "landlord" ? (
               <Nav.Link className="fs-5" onClick={props.showListingModalHandler}>
-                Create Listing
+                <FilePlus size={18} className="mb-1 me-1" />
+                <span>Create Listing</span>
               </Nav.Link>
             ) : null}
             {props.isLoggedIn ? (

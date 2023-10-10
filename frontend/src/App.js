@@ -137,7 +137,6 @@ function App() {
       fetch("/users/my-profile")
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setUserAddress(data.address);
           setUserHousingType(data.housingtype);
           setUserName(data.fullname);
@@ -197,7 +196,6 @@ function App() {
         setCurrentListingData(data.data);
         setLoadingData(false);
       };
-      console.log("running");
     }
     return () => {
       if (eventSource) {
@@ -276,7 +274,6 @@ function App() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data.data);
           setRentingsData(data.data);
         });
     }

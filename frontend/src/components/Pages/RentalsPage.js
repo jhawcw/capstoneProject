@@ -2,7 +2,6 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/esm/Button";
 
 const RentalsPage = (props) => {
-  console.log(props.rentingsData);
   return (
     <div
       style={{
@@ -57,7 +56,9 @@ const RentalsPage = (props) => {
                   </td>
                   <td>{ele.status}</td>
                   <td>
-                    <Button>Do something</Button>
+                    <Button disabled={ele.status === "On going" ? true : false}>
+                      Do something
+                    </Button>
                   </td>
                 </tr>
               );
