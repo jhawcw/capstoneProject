@@ -13,4 +13,6 @@ router.get("/payment-success", rentingController.createRentingPeriod);
 
 // router.get("/smth", rentingController.test);
 
+router.get("/my-rentings", authController.protect, rentingController.getMyRentings);
+
 module.exports = router;

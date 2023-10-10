@@ -63,9 +63,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     return next(new AppError("You are not logged in! Please login to get access", 401));
   }
   // 2) validate the token using the JWT package
-  console.log("this is the point");
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log("this is after the point");
   // 3) check if user still exist
   const freshUser = await userModel.findById(decoded.id);
   if (!freshUser) {

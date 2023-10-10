@@ -41,6 +41,7 @@ function App() {
   const [selectedListingPDFUrl, setSelectedListingPDFUrl] = useState("");
   const [applicationsData, setApplicationsData] = useState("");
   const [applicationListingId, setApplicationListingId] = useState(null);
+  const [rentingsData, setRentingsData] = useState([]);
 
   // Login state
   const [loggedIn, setLoggedIn] = useState(false);
@@ -247,13 +248,12 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         setListingData(data.data);
-        console.log(data.data);
       });
   }, []);
 
   // get all related applications from the server
   useEffect(() => {
-    if (cookies) {
+    if (loggedIn) {
       fetch("/applications/myapplications", {
         headers: {
           authorization: `Bearer ${cookies["Rent@SG Cookie"]}`,
@@ -264,7 +264,23 @@ function App() {
           setApplicationsData(data.data);
         });
     }
-  }, [cookies]);
+  }, [cookies, loggedIn]);
+
+  //get all rentings from the server
+  useEffect(() => {
+    if (userId) {
+      fetch("/rentings/my-rentings", {
+        headers: {
+          authorization: `Bearer ${cookies["Rent@SG Cookie"]}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data.data);
+          setRentingsData(data.data);
+        });
+    }
+  }, [userId, cookies]);
 
   // get all the unverified listings on the server
   useEffect(() => {
@@ -549,7 +565,9 @@ function App() {
           ></ApplicationsPage>
         ) : null}
 
-        {displayListings === "my rentals" ? <RentalsPage></RentalsPage> : null}
+        {displayListings === "my rentals" ? (
+          <RentalsPage rentingsData={rentingsData}></RentalsPage>
+        ) : null}
       </Container>
     </div>
   );

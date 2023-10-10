@@ -37,6 +37,7 @@ rentingSchema.pre("save", function (next) {
 
 rentingSchema.pre(/^find/, function (next) {
   this.populate("tenant").populate("listing").populate("landLord");
+  next();
 });
 
 const Renting = mongoose.model("Renting", rentingSchema);

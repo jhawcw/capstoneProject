@@ -67,3 +67,20 @@ exports.createRentingPeriod = async (req, res, next) => {
 
   res.redirect(302, "http://localhost:3000/?renting=success");
 };
+
+exports.getMyRentings = async (req, res) => {
+  const role = req.user.role;
+  let myRentings;
+  if (role === "landlord") {
+    myRentings = await rentingModel.find({ landLord: req.user._id });
+  } else if (role === "user") {
+    myRentings = await rentingModel.find({ tenant: req.user._id });
+  } else {
+    myRentings = await rentingModel.find();
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: myRentings,
+  });
+};
