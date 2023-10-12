@@ -16,6 +16,9 @@ const EditListingModal = (props) => {
         </Modal.Header>
         <Modal.Body>
           <EditListingForm
+            setShowToast={props.setShowToast}
+            setBackendMessage={props.setBackendMessage}
+            setBackendStatus={props.setBackendStatus}
             setCurrentListingData={props.setCurrentListingData}
             currentListingData={props.currentListingData}
             closeEditListingModalHandler={props.closeEditListingModalHandler}

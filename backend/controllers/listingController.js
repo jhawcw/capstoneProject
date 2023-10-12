@@ -269,6 +269,7 @@ exports.deleteListing = catchAsync(async (req, res) => {
 
 exports.verifyListing = catchAsync(async (req, res) => {
   const formData = req.body;
+  console.log("we reached here");
   if (req.file) {
     const doc = await listingModel.findOneAndUpdate(
       { _id: req.params.id },

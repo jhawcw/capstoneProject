@@ -59,7 +59,7 @@ const CreateListingForm = (props) => {
     let newId;
 
     try {
-      const response = await fetch("http://localhost:3001/listings/create", {
+      await fetch("http://localhost:3001/listings/create", {
         method: "POST",
         headers: {
           authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,

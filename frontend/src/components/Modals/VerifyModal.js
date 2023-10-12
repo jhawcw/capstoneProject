@@ -12,6 +12,9 @@ const VerifyModal = (props) => {
         </Modal.Header>
         <Modal.Body>
           <VerifyForm
+            setBackendMessage={props.setBackendMessage}
+            setBackendStatus={props.setBackendStatus}
+            setShowToast={props.setShowToast}
             currentListingId={props.currentListingId}
             cookies={props.cookies}
             userId={props.userId}

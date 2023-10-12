@@ -56,16 +56,22 @@ const EditListingForm = (props) => {
           },
           body: form,
         }
-      );
-      if (response) {
-        props.setLoadingData(true);
-        fetch(`/listings/${props.currentListingData._id}`)
-          .then((response) => response.json())
-          .then((data) => {
-            props.setCurrentListingData(data.data.data);
-            props.setLoadingData(false);
-          });
-      }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          props.setBackendMessage(data.message);
+          props.setBackendStatus(data.status);
+        })
+        .then(async () => {
+          props.setLoadingData(true);
+          fetch(`/listings/${props.currentListingData._id}`)
+            .then((response) => response.json())
+            .then((data) => {
+              props.setShowToast(true);
+              props.setCurrentListingData(data.data.data);
+              props.setLoadingData(false);
+            });
+        });
     } catch (err) {
       console.log(err);
     }

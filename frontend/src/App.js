@@ -441,6 +441,9 @@ function App() {
       ></RentModal>
 
       <VerifyModal
+        setBackendMessage={setBackendMessage}
+        setBackendStatus={setBackendStatus}
+        setShowToast={setShowToast}
         showVerifyModal={showVerifyModal}
         setShowVerifyModal={setShowVerifyModal}
         currentListingId={currentListingId}
@@ -451,6 +454,9 @@ function App() {
       ></VerifyModal>
 
       <EditListingModal
+        setBackendMessage={setBackendMessage}
+        setBackendStatus={setBackendStatus}
+        setShowToast={setShowToast}
         showEditListingModal={showEditListingModal}
         setShowEditListingModal={setShowEditListingModal}
         closeEditListingModalHandler={closeEditListingModalHandler}

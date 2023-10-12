@@ -33,7 +33,12 @@ router.post(
   listingController.updateListingAgreement
 );
 
-router.patch("/verifylisting/:id", authController.protect, listingController.verifyListing);
+router.patch(
+  "/verifylisting/:id",
+  authController.protect,
+  listingController.uploadVerificationPhoto,
+  listingController.verifyListing
+);
 router.get("/myagreement/:id", listingController.myAgreement);
 
 router.get("/continuous-update/:id", listingController.continuousNewData);

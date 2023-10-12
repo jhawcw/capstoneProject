@@ -13,29 +13,32 @@ const VerifyForm = (props) => {
     const form = new FormData();
 
     form.append("photo", verificationImageInputRef.current.files[0]);
-    console.log(form);
+    // console.log(form);
 
     try {
-      const response = await fetch(`http://localhost:3001/listings/${props.currentListingId}`, {
+      await fetch(`http://localhost:3001/listings/verifylisting/${props.currentListingId}`, {
         method: "PATCH",
         headers: {
           authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
         },
         body: form,
-      });
-      console.log(response);
-      if (response) {
-        fetch(`/listings/allunverifiedlistings?landlord=${props.userId}`, {
-          headers: {
-            authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
-          },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            props.setUnverifiedListingData(data.data);
-          });
-      }
-      props.closeVerifyModalHandler();
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          props.setBackendMessage(data.message);
+          props.setBackendStatus(data.status.toUpperCase());
+          props.setShowToast(true);
+          fetch(`/listings/allunverifiedlistings?landlord=${props.userId}`, {
+            headers: {
+              authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              props.setUnverifiedListingData(data.data);
+              props.closeVerifyModalHandler();
+            });
+        });
     } catch (err) {
       console.log(err);
     }
