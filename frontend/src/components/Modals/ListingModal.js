@@ -17,6 +17,10 @@ const ListingModal = (props) => {
         </Modal.Header>
         <Modal.Body>
           <CreateListingForm
+            setBackendMessage={props.setBackendMessage}
+            setBackendStatus={props.setBackendStatus}
+            setShowToast={props.setShowToast}
+            setDisplayListings={props.setDisplayListings}
             closeListingModalHandler={props.closeListingModalHandler}
             userAddress={props.userAddress}
             userHousingType={props.userHousingType}

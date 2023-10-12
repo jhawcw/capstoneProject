@@ -41,7 +41,7 @@ const CreateListingForm = (props) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formData);
+    // console.log(formData);
 
     const form = new FormData();
     for (const key in formData) {
@@ -68,9 +68,10 @@ const CreateListingForm = (props) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          props.setBackendMessage(data.message);
+          props.setBackendStatus(data.status.toUpperCase());
           newId = data.newListingId;
-          console.log(newId);
+          // console.log(newId);
         })
         .then(async () => {
           await fetch(`http://localhost:3001/listings/agreement/${newId}`, {
@@ -83,20 +84,20 @@ const CreateListingForm = (props) => {
 
           // let newData = await response2.json();
           // console.log(newData);
-        });
-
-      if (response) {
-        fetch(`/listings/alllistings?landlord=${props.userId}`)
-          .then((response) => response.json())
-          .then((data) => {
-            props.setUserListingData(data.data);
-          });
-      }
+        })
+        .then(
+          fetch(`/listings/alllistings?landlord=${props.userId}`)
+            .then((response) => response.json())
+            .then((data) => {
+              props.setUserListingData(data.data);
+              props.setDisplayListings("my listings");
+              props.setShowToast(true);
+              props.closeListingModalHandler();
+            })
+        );
     } catch (err) {
       console.log(err);
     }
-
-    // props.closeListingModalHandler();
   };
 
   const downloadAgreementHandler = () => {

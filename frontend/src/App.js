@@ -19,6 +19,7 @@ import RentModal from "./components/Modals/RentModal";
 import UpdateApplicationModal from "./components/Modals/UpdateApplicationModal";
 import PaymentModal from "./components/Modals/paymentModal";
 import RentalsPage from "./components/Pages/RentalsPage";
+import BackendToast from "./components/Toasts/BackendToast";
 
 function App() {
   const [backendData, setBackendData] = useState("");
@@ -42,6 +43,9 @@ function App() {
   const [applicationsData, setApplicationsData] = useState("");
   const [applicationListingId, setApplicationListingId] = useState(null);
   const [rentingsData, setRentingsData] = useState([]);
+  const [backendMessage, setBackendMessage] = useState("");
+  const [backendStatus, setBackendStatus] = useState("");
+  const [showToast, setShowToast] = useState(false);
 
   // Login state
   const [loggedIn, setLoggedIn] = useState(false);
@@ -382,6 +386,10 @@ function App() {
       ></PaymentModal>
 
       <ListingModal
+        setBackendMessage={setBackendMessage}
+        setBackendStatus={setBackendStatus}
+        setShowToast={setShowToast}
+        setDisplayListings={setDisplayListings}
         showListingModal={showListingModal}
         setShowListingModal={setShowListingModal}
         closeListingModalHandler={closeListingModalHandler}
@@ -458,6 +466,13 @@ function App() {
         userName={userName}
         sex={sex}
       ></ProfileModal>
+
+      <BackendToast
+        backendStatus={backendStatus}
+        backendMessage={backendMessage}
+        showToast={showToast}
+        setShowToast={setShowToast}
+      ></BackendToast>
 
       <Container style={{ paddingTop: "10vh", minHeight: "100vh" }}>
         <Row>
