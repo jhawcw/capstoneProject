@@ -254,7 +254,7 @@ function App() {
       .then((data) => {
         setListingData(data.data);
       });
-  }, []);
+  }, [displayListings]);
 
   // get all related applications from the server
   useEffect(() => {
@@ -299,7 +299,7 @@ function App() {
           setUnverifiedListingData(data.data);
         });
     }
-  }, [userId, currentListingData]);
+  }, [userId, cookies]);
 
   // check if cookie token is present in the browser
   useEffect(() => {
@@ -485,6 +485,10 @@ function App() {
 
       <Container style={{ paddingTop: "10vh", minHeight: "100vh" }}>
         <Row>
+          {listingData.length === 0 && displayListings === "verified" ? (
+            <h6 className="text-center">There is currently no verified listings</h6>
+          ) : null}
+
           {displayListings === "verified" &&
             listingData
               .filter((item) => item.active === true)
@@ -506,6 +510,7 @@ function App() {
                   />
                 </Col>
               ))}
+
           {displayListings === "my listings" &&
             userListingData.map((item, ind) => (
               <Col md={3} style={{ height: "425px" }} key={ind} className="mb-4  mt-4">
@@ -522,6 +527,10 @@ function App() {
                 />
               </Col>
             ))}
+
+          {unverifiedListingData.length === 0 && displayListings === "verify listings" ? (
+            <h6 className="text-center">There is currently no unverified listings</h6>
+          ) : null}
 
           {displayListings === "verify listings" &&
             unverifiedListingData.map((item, ind) => (
