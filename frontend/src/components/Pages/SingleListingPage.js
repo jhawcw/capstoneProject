@@ -31,8 +31,8 @@ const SingleListingPage = (props) => {
                     className="rounded"
                   ></img>
                   <Carousel.Caption>
-                    <h3>First slide label</h3>
-                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                    {/* <h3>First slide label</h3>
+                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p> */}
                   </Carousel.Caption>
                 </Carousel.Item>
               );
@@ -66,7 +66,15 @@ const SingleListingPage = (props) => {
         <p>Monthly Rental Fee: SGD${props.currentListingData.price}</p>
         <p>Renting Out: {props.currentListingData.rentalType}</p>
         <hr></hr>
-        <p>{props.currentListingData.description}</p>
+        {props.currentListingData.description.length > 0 &&
+        props.currentListingData.description.includes("\r\n") ? (
+          props.currentListingData.description.split("\r\n").map((ele, ind) => {
+            return <p key={ind}>{ele}</p>;
+          })
+        ) : (
+          <p>{props.currentListingData.description}</p>
+        )}
+
         {props.currentListingData.landlord[0]._id === props.userId && (
           <Button className="me-3 btn btn-primary" onClick={props.deleteListingHandler}>
             Delete

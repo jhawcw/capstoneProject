@@ -81,20 +81,10 @@ const CreateListingForm = (props) => {
             },
             body: agreementForm,
           });
-
-          // let newData = await response2.json();
-          // console.log(newData);
-        })
-        .then(
-          fetch(`/listings/alllistings?landlord=${props.userId}`)
-            .then((response) => response.json())
-            .then((data) => {
-              props.setUserListingData(data.data);
-              props.setDisplayListings("my listings");
-              props.setShowToast(true);
-              props.closeListingModalHandler();
-            })
-        );
+          props.setDisplayListings("my listings");
+          props.setShowToast(true);
+          props.closeListingModalHandler();
+        });
     } catch (err) {
       console.log(err);
     }

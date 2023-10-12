@@ -24,7 +24,7 @@ import BackendToast from "./components/Toasts/BackendToast";
 function App() {
   const [backendData, setBackendData] = useState("");
   const [listingData, setListingData] = useState([]);
-  const [userListingData, setUserListingData] = useState([]);
+  const [userListingData, setUserListingData] = useState(null);
   const [unverifiedListingData, setUnverifiedListingData] = useState([]);
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
@@ -165,6 +165,9 @@ function App() {
         .then((data) => {
           // console.log(data);
           if (data) {
+            setShowToast(true);
+            setBackendMessage(data.message);
+            setBackendStatus(data.status);
             fetch("/listings/alllistings?verified=true")
               .then((response) => response.json())
               .then((data) => {
@@ -324,7 +327,7 @@ function App() {
           setUserListingData(data.data);
         });
     }
-  }, [userId]);
+  }, [userId, displayListings]);
 
   useEffect(() => {
     if (currentListingId && displayListings === "single listing") {

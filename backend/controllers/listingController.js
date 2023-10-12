@@ -152,7 +152,7 @@ exports.createListing = async (req, res) => {
   let newListing;
 
   if (req.files) {
-    const images = req.listingPictureName.map((image) => image.filename);
+    // const images = req.listingPictureName.map((image) => image.filename);
 
     newListing = new listingModel({
       title: formData.title,
@@ -163,7 +163,7 @@ exports.createListing = async (req, res) => {
       description: formData.description,
       rentalType: formData.rentaltype,
       imageCover: req.coverPictureName,
-      images: images,
+      images: req.listingPictureName,
     });
   } else {
     newListing = new listingModel({
@@ -253,7 +253,7 @@ exports.updateListing = async (req, res) => {
 
 exports.deleteListing = catchAsync(async (req, res) => {
   const query = await listingModel.findByIdAndDelete(req.params.id);
-  console.log(query);
+  // console.log(query);
   if (query) {
     return res.status(200).json({
       status: "success",
@@ -375,8 +375,8 @@ exports.myAgreement = async (req, res) => {
   const listingId = req.params.id;
 
   const pdfName = await listingModel.findById(listingId);
-  console.log("hello");
-  console.log(pdfName.agreement);
+  // console.log("hello");
+  // console.log(pdfName.agreement);
   // Replace 'pdf-directory' with the actual directory where your PDF files are stored
   const pdfDirectory = path.join(__dirname, "..", "public", "agreements");
 
