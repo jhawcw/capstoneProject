@@ -168,6 +168,7 @@ function App() {
             setShowToast(true);
             setBackendMessage(data.message);
             setBackendStatus(data.status);
+            console.log(data.status);
             fetch("/listings/alllistings?verified=true")
               .then((response) => response.json())
               .then((data) => {
