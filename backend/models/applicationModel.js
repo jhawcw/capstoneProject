@@ -28,6 +28,18 @@ const applicationSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    tenantAgreementFile: {
+      type: String,
+      default: "",
+    },
+    landLordAgreementFile: {
+      type: String,
+      default: "",
+    },
+    adminApprovalFile: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true, // This option adds createdAt and updatedAt fields

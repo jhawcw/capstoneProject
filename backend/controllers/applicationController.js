@@ -279,9 +279,12 @@ exports.deleteApplication = async (req, res) => {
 exports.updateStatusApplication = async (req, res) => {
   const applicationId = req.params.id;
   const role = req.user.role;
+  const file = req.file.filename;
+  console.log(file, "this is file");
   if (role === "user") {
     const query = await applicationModel.findByIdAndUpdate(applicationId, {
       tenantAgreement: true,
+      tenantAgreementFile: file,
       status: "Pending Landlord's Agreement",
     });
   } else if (role === "landlord") {

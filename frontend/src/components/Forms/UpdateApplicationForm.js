@@ -14,23 +14,20 @@ const UpdateApplicationForm = (props) => {
 
     form.append("agreement", agreementInputRef.current.files[0]);
 
-    console.log(props.applicationListingId);
-    console.log(agreementInputRef.current.files[0]);
-
     try {
-      const response = await fetch(
-        `http://localhost:3001/applications/updatestatus/${props.applicationListingId}`,
-        {
-          method: "PATCH",
-          headers: {
-            authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
-          },
-          body: form,
-        }
-      )
+      await fetch(`http://localhost:3001/applications/updatestatus/${props.applicationListingId}`, {
+        method: "PATCH",
+        headers: {
+          authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
+        },
+        body: form,
+      })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          // console.log(data);
+          props.setBackendMessage(data.message);
+          props.setBackendStatus(data.status.toUpperCase());
+          props.setShowToast(true);
           if (data.status === "success") {
             fetch("/applications/myapplications", {
               headers: {
@@ -39,7 +36,7 @@ const UpdateApplicationForm = (props) => {
             })
               .then((response) => response.json())
               .then((data) => {
-                console.log(data.data);
+                // console.log(data.data);
                 props.setApplicationsData(data.data);
               });
           }
@@ -48,7 +45,7 @@ const UpdateApplicationForm = (props) => {
       console.log(err);
     }
 
-    // props.closeApplicationModalHandler();
+    props.closeApplicationModalHandler();
   };
 
   return (

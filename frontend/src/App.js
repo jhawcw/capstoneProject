@@ -404,6 +404,9 @@ function App() {
       ></ListingModal>
 
       <UpdateApplicationModal
+        setBackendMessage={setBackendMessage}
+        setBackendStatus={setBackendStatus}
+        setShowToast={setShowToast}
         showApplicationModal={showApplicationModal}
         setShowApplicationModal={setShowApplicationModal}
         applicationListingId={applicationListingId}

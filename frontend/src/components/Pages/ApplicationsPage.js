@@ -83,7 +83,14 @@ const ApplicationsPage = (props) => {
     }
   };
 
-  const downloadAgreement = () => {};
+  const downloadAgreement = (listingAgreement) => {
+    const backendUrl = `http://localhost:3001/listings/download/${listingAgreement}`;
+    const link = document.createElement("a");
+    link.href = backendUrl;
+    link.target = "_blank";
+    link.download = listingAgreement;
+    link.click();
+  };
 
   return (
     <Elements stripe={stripePromise}>
@@ -173,13 +180,38 @@ const ApplicationsPage = (props) => {
                             >
                               Submit Agreement
                             </Button>
-                            <Button
-                              className="btn-primary"
-                              style={{ backgroundColor: "#fff1ef" }}
-                              onClick={downloadAgreement}
-                            >
-                              Download Agreement
-                            </Button>
+                            {props.role === "user" && (
+                              <Button
+                                className="btn-primary"
+                                // style={{ backgroundColor: "#fff1ef" }}
+                                style={{ backgroundColor: "red" }}
+                                onClick={() => downloadAgreement(ele.listing.agreement)}
+                              >
+                                Download Agreement
+                              </Button>
+                            )}
+                            {props.role === "landlord" && (
+                              <Button
+                                className="btn-primary"
+                                style={{ backgroundColor: "#fff1ef" }}
+                                onClick={() =>
+                                  downloadAgreement(ele.application.tenantAgreementFile)
+                                }
+                              >
+                                Download Agreement
+                              </Button>
+                            )}
+                            {props.role === "admin" && (
+                              <Button
+                                className="btn-primary"
+                                style={{ backgroundColor: "#fff1ef" }}
+                                onClick={() =>
+                                  downloadAgreement(ele.application.landlordAgreementFile)
+                                }
+                              >
+                                Download Agreement
+                              </Button>
+                            )}
                           </div>
                         )}
                       </td>

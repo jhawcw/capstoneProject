@@ -17,6 +17,9 @@ const UpdateApplicationModal = (props) => {
         </Modal.Header>
         <Modal.Body>
           <UpdateApplicationForm
+            setBackendMessage={props.setBackendMessage}
+            setBackendStatus={props.setBackendStatus}
+            setShowToast={props.setShowToast}
             applicationListingId={props.applicationListingId}
             setApplicationListingId={props.setApplicationListingId}
             closeApplicationModalHandler={props.closeApplicationModalHandler}
