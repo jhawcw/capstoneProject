@@ -65,7 +65,7 @@ exports.createRentingPeriod = async (req, res, next) => {
 
   renting.save();
 
-  res.redirect(302, "http://localhost:3000/?renting=success");
+  res.redirect(302, "http://localhost:3000/?renting=renting-success");
 };
 
 exports.getMyRentings = async (req, res) => {

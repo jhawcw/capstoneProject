@@ -228,6 +228,22 @@ function App() {
     }
   }, []); // Empty dependency array ensures this effect runs once
 
+  // to show success message when register as a landlord
+  useEffect(() => {
+    // Capture the query parameter from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get("renting");
+
+    // Update the state with the message
+    if (message) {
+      setDisplayListings(message);
+      setTimeout(function () {
+        // Redirect the user to a new URL
+        window.location.href = "/"; // Replace with your desired URL
+      }, 5000);
+    }
+  }, []); // Empty dependency array ensures this effect runs once
+
   // get the env variables for the singpass API
   useEffect(() => {
     fetch("/getEnv")
@@ -492,7 +508,9 @@ function App() {
 
       <Container style={{ paddingTop: "10vh", minHeight: "100vh" }}>
         <Row>
-          {listingData.length === 0 && displayListings === "verified" ? (
+          {(listingData.length === 0 ||
+            listingData.filter((item) => item.active === true).length === 0) &&
+          displayListings === "verified" ? (
             <h6 className="text-center">There is currently no verified listings</h6>
           ) : null}
 
@@ -587,6 +605,16 @@ function App() {
                 your fullname and password.
               </div>
               <div>You will also be redirected to the homepage in 5 seconds.</div>
+            </>
+          )}
+
+          {displayListings === "renting-success" && (
+            <>
+              <div>
+                Congratulations on successfully masking a deposit, you can now view your rentals
+                under "My Rentals"
+              </div>
+              <div>You will be redirected to the "My Rental" page in 5 seconds.</div>
             </>
           )}
         </Row>
