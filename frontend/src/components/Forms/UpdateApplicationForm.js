@@ -13,6 +13,7 @@ const UpdateApplicationForm = (props) => {
     const form = new FormData();
 
     form.append("agreement", agreementInputRef.current.files[0]);
+    form.append("decision", "approve");
 
     try {
       await fetch(`http://localhost:3001/applications/updatestatus/${props.applicationListingId}`, {

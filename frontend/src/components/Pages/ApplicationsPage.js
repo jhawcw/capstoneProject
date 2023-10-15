@@ -117,7 +117,8 @@ const ApplicationsPage = (props) => {
             </tr>
           </thead>
           <tbody>
-            {props.applicationsData.length === 0 ? (
+            {props.applicationsData.length === 0 ||
+            props.applicationsData.filter((ele) => ele.application.active === true).length === 0 ? (
               <tr>
                 <td colSpan={8} className="text-center">
                   You currently have no applications
@@ -143,11 +144,18 @@ const ApplicationsPage = (props) => {
                           <div>
                             <Button
                               className="mb-2"
-                              onClick={() =>
-                                adminUpdateApplicationHandler(true, ele.application._id)
-                              }
+                              onClick={() => updateApplicationHandler(ele.application._id)}
                             >
                               Approve
+                            </Button>
+                            <Button
+                              className="btn-primary mb-2"
+                              style={{ backgroundColor: "#fff1ef" }}
+                              onClick={() =>
+                                downloadAgreement(ele.application.landlordAgreementFile)
+                              }
+                            >
+                              Download Agreement
                             </Button>
                             <Button
                               onClick={() =>

@@ -280,7 +280,6 @@ exports.updateStatusApplication = async (req, res) => {
   const applicationId = req.params.id;
   const role = req.user.role;
   const file = req.file.filename;
-  console.log(file, "this is file");
   if (role === "user") {
     const query = await applicationModel.findByIdAndUpdate(applicationId, {
       tenantAgreement: true,
@@ -290,6 +289,7 @@ exports.updateStatusApplication = async (req, res) => {
   } else if (role === "landlord") {
     const query = await applicationModel.findByIdAndUpdate(applicationId, {
       landLordAgreement: true,
+      landlordAgreementFile: file,
       status: "Pending Admin's Approval",
     });
   } else if (role === "admin") {
@@ -298,6 +298,7 @@ exports.updateStatusApplication = async (req, res) => {
       const query = await applicationModel.findByIdAndUpdate(applicationId, {
         adminApproval: true,
         adminAcknowledged: true,
+        adminApprovalFile: file,
         status: "Approved, awaiting deposit",
       });
     } else if (req.body.decision === "reject") {

@@ -2,6 +2,15 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/esm/Button";
 
 const RentalsPage = (props) => {
+  const downloadAgreementHandler = (tenancyAgreement) => {
+    const backendUrl = `http://localhost:3001/listings/download/${tenancyAgreement}`;
+    const link = document.createElement("a");
+    link.href = backendUrl;
+    link.target = "_blank";
+    link.download = tenancyAgreement;
+    link.click();
+  };
+
   return (
     <div
       style={{
@@ -56,8 +65,11 @@ const RentalsPage = (props) => {
                   </td>
                   <td>{ele.status}</td>
                   <td>
-                    <Button disabled={ele.status === "On going" ? true : false}>
-                      Do something
+                    {/* <Button disabled={ele.status === "On going" ? true : false} className="mb-2">
+                      Stop Renting
+                    </Button> */}
+                    <Button onClick={() => downloadAgreementHandler(ele.tenancyAgreement)}>
+                      Download Agreement
                     </Button>
                   </td>
                 </tr>

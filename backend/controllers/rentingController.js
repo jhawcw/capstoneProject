@@ -49,17 +49,17 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 exports.createRentingPeriod = async (req, res, next) => {
   const { listing, landlord, tenant } = req.query;
 
-  const renting = new rentingModel({
-    listing: listing,
-    tenant: tenant,
-    landLord: landlord,
-    tenancyAgreement: "",
-  });
-
   const application = await applicationModel.findOneAndUpdate(
     { listing: listing, tenant: tenant },
     { active: false }
   );
+
+  const renting = new rentingModel({
+    listing: listing,
+    tenant: tenant,
+    landLord: landlord,
+    tenancyAgreement: application.adminApprovalFile,
+  });
 
   const updatedListing = await listingModel.findOneAndUpdate({ _id: listing }, { active: false });
 

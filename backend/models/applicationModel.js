@@ -32,7 +32,7 @@ const applicationSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    landLordAgreementFile: {
+    landlordAgreementFile: {
       type: String,
       default: "",
     },
