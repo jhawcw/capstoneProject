@@ -438,6 +438,10 @@ function App() {
         cookies={cookies}
         applicationListingId={applicationListingId}
         setApplicationsData={setApplicationsData}
+        setDisplayListings={setDisplayListings}
+        setBackendMessage={setBackendMessage}
+        setBackendStatus={setBackendStatus}
+        setShowToast={setShowToast}
       ></RentModal>
 
       <VerifyModal

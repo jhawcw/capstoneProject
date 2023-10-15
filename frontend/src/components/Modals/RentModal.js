@@ -14,6 +14,8 @@ const RentModal = (props) => {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        props.setBackendMessage(data.message);
+        props.setBackendStatus(data.status);
         fetch("/applications/myapplications", {
           headers: {
             authorization: `Bearer ${props.cookies["Rent@SG Cookie"]}`,
@@ -22,6 +24,9 @@ const RentModal = (props) => {
           .then((response) => response.json())
           .then((data) => {
             props.setApplicationsData(data.data);
+            props.setShowToast();
+            props.setDisplayListings("my applications");
+            handleClose();
           });
       });
   };

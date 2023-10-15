@@ -59,28 +59,6 @@ const ApplicationsPage = (props) => {
   const paymentHandler = async (listingId) => {
     console.log("paid");
 
-    // if (!stripe || !elements) {
-    //   // Stripe.js has not loaded yet.
-    //   return;
-    // }
-
-    // // Use stripe and elements to handle payment
-    // const result = await stripe.createPaymentMethod({
-    //   type: "card",
-    //   card: elements.getElement(CardElement),
-    // });
-    // console.log(result);
-
-    // if (result.error) {
-    //   console.error(result.error.message);
-    // } else {
-    //   // Payment method created successfully, submit the form to your backend
-    //   // Send the payment method ID to your server
-    //   const paymentMethodId = result.paymentMethod.id;
-    //   // Make a request to your backend to handle the payment
-    //   // Example: axios.post('http://localhost:3001/pay', { paymentMethodId });
-    // }
-
     try {
       await fetch(`/rentings/checkout-session/${listingId}`, {
         headers: {
@@ -104,6 +82,9 @@ const ApplicationsPage = (props) => {
       console.log(err);
     }
   };
+
+  const downloadAgreement = () => {};
+
   return (
     <Elements stripe={stripePromise}>
       <div
@@ -180,16 +161,26 @@ const ApplicationsPage = (props) => {
                             Deposit 💰
                           </Button>
                         ) : (
-                          <Button
-                            disabled={
-                              props.role === "user"
-                                ? ele.application.tenantAgreement
-                                : ele.application.landLordAgreement
-                            }
-                            onClick={() => updateApplicationHandler(ele.application._id)}
-                          >
-                            Submit Agreement
-                          </Button>
+                          <div>
+                            <Button
+                              className="mb-2"
+                              disabled={
+                                props.role === "user"
+                                  ? ele.application.tenantAgreement
+                                  : ele.application.landLordAgreement
+                              }
+                              onClick={() => updateApplicationHandler(ele.application._id)}
+                            >
+                              Submit Agreement
+                            </Button>
+                            <Button
+                              className="btn-primary"
+                              style={{ backgroundColor: "#fff1ef" }}
+                              onClick={downloadAgreement}
+                            >
+                              Download Agreement
+                            </Button>
+                          </div>
                         )}
                       </td>
                     </tr>
