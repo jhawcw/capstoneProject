@@ -17,6 +17,9 @@ const LoginModal = (props) => {
             setCookie={props.setCookie}
             setRole={props.setRole}
             setUserId={props.setUserId}
+            setBackendMessage={props.setBackendMessage}
+            setBackendStatus={props.setBackendStatus}
+            setShowToast={props.setShowToast}
           ></LoginForm>
         </Modal.Body>
       </Modal>

@@ -440,6 +440,9 @@ function App() {
         setCookie={setCookie}
         setRole={setRole}
         setUserId={setUserId}
+        setBackendMessage={setBackendMessage}
+        setBackendStatus={setBackendStatus}
+        setShowToast={setShowToast}
       ></LoginModal>
 
       <RegisterModal

@@ -37,7 +37,10 @@ const LoginForm = (props) => {
         props.loginHandler();
         props.closeLoginModalHandler();
       } else {
-        console.log("Wrong credentials lol");
+        props.setBackendStatus(response.status);
+        props.setBackendMessage("Wrong credentials, try again.");
+        props.closeLoginModalHandler();
+        props.setShowToast(true);
       }
     } catch (error) {
       console.log(error, "this is the error");
