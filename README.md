@@ -17,13 +17,25 @@ Before you begin, make sure you have the following installed:
    git clone https://github.com/jhawcw/capstoneProject.git
    ```
 
-2. Navigate to the project directory:
+2. Navigate to the frontend directory:
 
    ```bash
-   cd rent@sg
+   cd rent@sg/frontend
    ```
 
 3. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Navigate to the backend directory:
+
+   ```bash
+   cd rent@sg/backend
+   ```
+
+5. Install dependencies:
 
    ```bash
    npm install
