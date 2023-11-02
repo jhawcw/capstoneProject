@@ -6,8 +6,9 @@ Welcome to Rent@SG! This document will guide you through the installation proces
 
 Before you begin, make sure you have the following installed:
 
-- Node.js: [Download Node.js](https://nodejs.org/)
+- Node.js: [Download Node.js](https://nodejs.org/) (NodeJs version 18.18.2 LTS)
 - npm (Node Package Manager): It comes with Node.js installation.
+- Port: 3000 and 3001 are not in used.
 
 ## Installation
 
